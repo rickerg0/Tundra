@@ -1,6 +1,16 @@
 angular.module('starter.services', [])
 
-.service("BLEService", function(){
+
+.service("Foo", function($http){
+	this.getList=function(callback){
+		$http({ url:"http://127.0.0.1:8080/TundraService/org/list" ,method:"GET"} ).then(callback,function(){ console.log("failed")});
+	}
+	console.log("FOO created");
+	//CloudService.request(params).then(function(response){
+		// Response from server
+	//});
+	
+}).service("BLEService", function(){
 	var device={};			
 	var devices=[];
 	var that = this;
@@ -43,8 +53,7 @@ angular.module('starter.services', [])
 		
 
 
-)
-.factory('Chats', function() {
+).factory('Chats', function() {
   
 });
 

@@ -25,13 +25,13 @@ angular.module('starter.services', [])
    
 	return {
 		connect:function() {
-			//ble.scan([], 30, onConnect, onError);
-			   device.name='none';
-				device.id='0';
-				device.rssi='0';
+			ble.scan([], 30, onConnect, onError);
+			   //device.name='none';
+				//device.id='0';
+				//device.rssi='0';
 				
-				devices.push(device);
-				devices.push({name:'foo',id:'4',rssi:'4'});
+				//devices.push(device);
+				//devices.push({name:'foo',id:'4',rssi:'4'});
 					
 				return devices;
 		},

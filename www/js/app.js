@@ -20,8 +20,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-   
-    ble.isEnabled(
+    
+    if(ble){
+    	ble.isEnabled(
     	function () {
     		document.getElementById("bleStatus").style= "color:green;";
     		alert(" BT is enabled");
@@ -30,6 +31,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     		alert(" BT is not enabled");
     	}
     );
+  }
   });
 })
 
@@ -46,7 +48,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html'
-  })
+ })
 
   // Each tab has its own nav history stack:
 

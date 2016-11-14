@@ -15,6 +15,10 @@
 		  <div class="buttons">
 			  <button id="bleStatus" class="button icon ion-bluetooth "></button>
 		  </div>
+		  <div class="buttons">
+			  <button ng-click="getOrganization()" id="OrgService" class="button ">Get Organization</button>
+			  
+		  </div>
 	  </ion-header-bar>
       <ion-label class="item item-input">
 		 <span class="input-label" >Input:</span>
@@ -34,6 +38,22 @@
 				 <td><a ng-click="getResult({{device.id}})">{{device.name}}</a></td>
 	     		<td>{{device.id}}</td>
 	     		<td>{{device.rssi}}</td>
+	     	</tr>
+     		
+			
+		 </tbody>
+		 
+	 </table>
+	  <table id="table-2">
+		 <thead>
+			 <tr>
+				 <th> -- Name-- </th>
+			 </tr>
+		 </thead>
+		 <tbody>
+		 <tr ng-repeat="org in list"> 
+
+	     		<td>{{org.name}}</td>
 	     	</tr>
      		
 			
