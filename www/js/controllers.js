@@ -18,9 +18,15 @@ angular.module('starter.controllers', [])
 		
 		isScanning = true;		
 		};
-	$scope.getResult = function (deviceID) {
-		$scope.deviceID = deviceID;
-		$ionicModal.fromTemplateUrl('templates/searchResults.html', {
+	$scope.getResult = function (device) {
+		//$scope.device = device;
+		Foo.getExhibitTag(function(data,status){ 
+			$scope.tag=data.data
+			console.log($scope.tag);
+			//console.log($scope.list[0].name);
+			},device );
+		
+		$ionicModal.fromTemplateUrl('templates/getResults.html', {
 			  scope: $scope,
 			  animation: 'slide-in-up'
 			 }).then(function(modal) {
@@ -28,6 +34,8 @@ angular.module('starter.controllers', [])
 			     $scope.modal.show();
 			 });
 	};
+	
+	
 	$scope.getOrganization = function (deviceID) {
 		console.log("getOrganization");
 		Foo.getList(function(data,status){ 
