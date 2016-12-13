@@ -21,7 +21,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       StatusBar.styleDefault();
     }
     
-    if(ble){
+    if(typeof(ble) != "undefined"){
     	ble.isEnabled(
     	function () {
     		document.getElementById("bleStatus").style= "color:green;";

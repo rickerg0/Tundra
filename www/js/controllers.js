@@ -7,7 +7,9 @@ angular.module('starter.controllers', [])
 	$scope.myColor  ='danger';
 	document.getElementById("bleStatus").style= "color:green;";
 	$scope.startScanning = function () {
-		$scope.devices =BLEService.connect();
+		BLEService.connect(function(devices) {
+			$scope.devices = devices;	
+		});
 		
 		
 		$scope.myText =  "startScanning";
