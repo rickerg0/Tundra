@@ -27,16 +27,18 @@
 	 <table id="table-1">
 		 <thead>
 			 <tr>
-				 <th> -- Name-- </th>
 				 <th> -- ID --</th>
+				 <th> -- Name-- </th>
+				 <th> -- TAG --</th>
 				 <th> -- RSSI --</th>
 			 </tr>
 		 </thead>
 		 <tbody>
 		 <tr ng-repeat="device in devices"> 
 		 	
-				 <td><a ng-click="getResult({{device}})">{{device.name}}</a></td>
-	     		<td>{{device.id}}</td>
+				 <td><a ng-click="getResult({{device}})">{{device.id}}</a></td>
+	     		<td>{{device.name}}</td>
+	     		<td>{{device.tag}}</td>
 	     		<td>{{device.rssi}}</td>
 	     	</tr>
      		

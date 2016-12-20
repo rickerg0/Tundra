@@ -22,10 +22,14 @@ angular.module('starter.controllers', [])
 		};
 	$scope.getResult = function (device) {
 		//$scope.device = device;
-		Foo.getExhibitTag(function(data,status){ 
-			$scope.tag=data.data
-			console.log($scope.tag);
-			//console.log($scope.list[0].name);
+		Foo.getExhibitTag(function(data,status){
+			console.log(data.data);
+			if (data.data && data.data.length > 0) {
+				$scope.media=data.data
+			} else {
+				console.log("getResult: no data returned");
+				$scope.message = "no data returned"
+			}
 			},device );
 		
 		$ionicModal.fromTemplateUrl('templates/getResults.html', {
@@ -47,29 +51,4 @@ angular.module('starter.controllers', [])
 			} );
 		
 	};
-})
-
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
-
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
 });

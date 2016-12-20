@@ -1,12 +1,21 @@
-<!--
-  This template loads for the 'tab.friend-detail' state (app.js)
-  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
-  The FriendsCtrl pulls data from the Friends service (service.js)
-  The Friends service returns an array of friend data
--->
+
 <ion-view >
   <ion-content class="padding">
-    device {{tag.name}}
-	
+	 <table id="table-1">
+		 <thead>
+			 <tr>
+				 <th> -- ID --</th>
+				 <th> -- MIME TYPE-- </th>
+				 <th> -- CONTENT --</th>
+			 </tr>
+		 </thead>
+		 <tbody>
+		 <tr ng-repeat="item in media"> 
+	     		<td>{{item.id}}</td>
+	     		<td>{{item.mimeType}}</td>
+	     		<td>{{item.content}}</td>
+	     	</tr>
+		 </tbody>
+	 </table>
   </ion-content>
 </ion-view>
