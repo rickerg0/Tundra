@@ -3,8 +3,10 @@ angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope,BLEService,OrganizationService,ExhibitService,$ionicModal,$http) {
 	$scope.devices = [];
 	var isScanning = true;
-	$scope.myText =  "Scan";
-	$scope.myColor  ='danger';
+	$scope.myText = "Scan";
+	$scope.myColor ='danger';
+	$scope.exhibitService = ExhibitService;
+	
 	document.getElementById("bleStatus").style= "color:green;";
 	$scope.startScanning = function () {
 		BLEService.connect(function(exibitTags) {

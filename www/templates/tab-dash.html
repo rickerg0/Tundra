@@ -33,9 +33,9 @@
 		     		<td><a ng-click="getMedia({{tag}})">{{tag.exhibitTagName}}</a></td>
 		     		<td>
 		     			<a ng-click="getMedia({{tag}})">
-				     		<i ng-if="'text/plain' == tag.exhibitTagMimeType" class="icon ion-document"></i>
-				     		<i ng-if="'audio/mpeg3' == tag.exhibitTagMimeType" class="icon ion-headphone"></i>
-				     		<i ng-if="'video/mpeg' == tag.exhibitTagMimeType" class="icon ion-videocamera"></i>
+		     				<i ng-if="exhibitService.isText(tag.exhibitTagMimeType)" class="icon ion-document"></i>
+		     				<i ng-if="exhibitService.isAudio(tag.exhibitTagMimeType)" class="icon ion-headphone"></i>
+		     				<i ng-if="exhibitService.isVideo(tag.exhibitTagMimeType)" class="icon ion-videocamera"></i>
 			     		</a>
 		     		</td>
 		     	</tr>
