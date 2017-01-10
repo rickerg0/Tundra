@@ -7,7 +7,7 @@ angular.module('starter.controllers', [])
 	$scope.myColor ='danger';
 	$scope.exhibitService = ExhibitService;
 	
-	document.getElementById("bleStatus").style= "color:green;";
+	document.getElementById("bleStatus").style= "color:red;";
 	$scope.startScanning = function () {
 		BLEService.connect(function(exibitTags) {
 			$scope.exibitTags = exibitTags;

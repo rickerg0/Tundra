@@ -20,18 +20,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    
+
+    // this is set to red by default, when it's enabled set it to green
     if(typeof(ble) != "undefined"){
     	ble.isEnabled(
-    	function () {
-    		document.getElementById("bleStatus").style= "color:green;";
-    		alert(" BT is enabled");
-    	},function () {
-    		document.getElementById("bleStatus").style= "color:red;";
-    		alert(" BT is not enabled");
-    	}
-    );
-  }
+	    	function () {
+	    		document.getElementById("bleStatus").style= "color:green;";
+	    	},function () {
+	    		document.getElementById("bleStatus").style= "color:red;";
+	    	}
+	    );
+    }
   });
 })
 
