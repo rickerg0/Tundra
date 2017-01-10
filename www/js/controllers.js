@@ -25,17 +25,25 @@ angular.module('starter.controllers', [])
 				console.log("getResult: no data returned");
 				$scope.message = "no data returned"
 			}
-			},tag 
-		);
-		
-		$ionicModal.fromTemplateUrl('templates/getResults.html', {
-			  scope: $scope,
-			  animation: 'slide-in-up'
-			 }).then(function(modal) {
-			     $scope.modal = modal;
-			     $scope.modal.show();
-			 }
-		 );
+			// get the right template based on mimetype
+			var templateUtl = '';
+			if ($scope.media.mimeType === 'text/plain') {
+				templateUtl = 'templates/textExhibit.html'
+			} else if ($scope.media.mimeType === 'video/mpeg') {
+				templateUtl = 'templates/textExhibit.html'
+			} else if ($scope.media.mimeType === 'audio/mpeg3') {
+				templateUtl = 'templates/textExhibit.html'
+			}
+			
+			$ionicModal.fromTemplateUrl(templateUtl, {
+				  scope: $scope,
+				  animation: 'slide-in-up'
+				 }).then(function(modal) {
+				     $scope.modal = modal;
+				     $scope.modal.show();
+				 }
+			 );
+		},tag);
 	};
 	
 	

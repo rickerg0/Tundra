@@ -28,10 +28,16 @@
 			 </thead>
 			 <tbody>
 				<tr ng-repeat="tag in exibitTags"> 
-					<td>{{tag.organizationName}}</td>
-					<td>{{tag.locationName}}</td>
+					<td><a ng-click="getMedia({{tag}})">{{tag.organizationName}}</a></td>
+					<td><a ng-click="getMedia({{tag}})">{{tag.locationName}}</a></td>
 		     		<td><a ng-click="getMedia({{tag}})">{{tag.exhibitTagName}}</a></td>
-		     		<td>{{tag.exhibitTagMimeType}}</td>
+		     		<td>
+		     			<a ng-click="getMedia({{tag}})">
+				     		<i ng-if="'text/plain' == tag.exhibitTagMimeType" class="icon ion-document"></i>
+				     		<i ng-if="'audio/mpeg3' == tag.exhibitTagMimeType" class="icon ion-headphone"></i>
+				     		<i ng-if="'video/mpeg' == tag.exhibitTagMimeType" class="icon ion-videocamera"></i>
+			     		</a>
+		     		</td>
 		     	</tr>
 			 </tbody>
 		  </table>
