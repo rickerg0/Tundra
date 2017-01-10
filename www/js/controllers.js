@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope,BLEService,Foo,$ionicModal,$http) {
+.controller('DashCtrl', function($scope,BLEService,OrganizationService,ExhibitService,$ionicModal,$http) {
 	$scope.devices = [];
 	var isScanning = true;
 	$scope.myText =  "Scan";
@@ -18,7 +18,7 @@ angular.module('starter.controllers', [])
 	};
 	
 	$scope.getMedia = function (tag) {
-		Foo.getExhibitTag(function(data,status){
+		ExhibitService.getExhibitTag(function(data,status){
 			if (data.data) {
 				$scope.media=data.data
 			} else {
@@ -49,7 +49,7 @@ angular.module('starter.controllers', [])
 	
 	$scope.getOrganization = function (deviceID) {
 		console.log("getOrganization");
-		Foo.getList(function(data,status){ 
+		OrganizationService.getList(function(data,status){ 
 			$scope.list=data.data
 			} );
 		

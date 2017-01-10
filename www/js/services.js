@@ -1,20 +1,19 @@
 angular.module('starter.services', [])
 
 
-.service("Foo", function($http){
+.service("OrganizationService", function($http){
 	this.getList=function(callback){
 		$http({ url:"http://127.0.0.1:8080/TundraService/org/list" ,method:"GET"} ).then(callback,function(){ console.log("failed")});
 	}
-	this.getExhibitTag=function(callback,tag){
-		console.log(tag);
-		$http({ url:"http://127.0.0.1:8080/TundraService/tag/media/"+tag.exhibitTagTag ,method:"GET"} ).then(callback,function(){ console.log("failed")});
-	}
-
-	console.log("FOO created");
 	//CloudService.request(params).then(function(response){
 		// Response from server
 	//});
 	
+}).service("ExhibitService", function($http){
+	this.getExhibitTag=function(callback,tag){
+		console.log(tag);
+		$http({ url:"http://127.0.0.1:8080/TundraService/tag/media/"+tag.exhibitTagTag ,method:"GET"} ).then(callback,function(){ console.log("failed")});
+	}
 }).service("BLEService", function($http){
 	var device={};			
 	var devices=[];
