@@ -10,11 +10,11 @@
 			 </tr>
 		 </thead>
 		 <tbody>
-		     <tr ng-repeat="item in media"> 
-	     		<td>{{item.id}}</td>
-	     		<td>{{item.mimeType}}</td>
-	     		<!-- TODO:  parse mime type and display proper media UI element -->
-	     		<td>{{item.content}}</td>
+		     <tr> 
+	     		<td>{{media.id}}</td>
+	     		<td>{{media.mimeType}}</td>
+	     		<!-- parse mime type and display proper media UI element -->
+	     		<td><span ng-if="'text/plain' == media.mimeType">{{media.content}}</span></td>     		
 	     	</tr>
 		 </tbody>
 	 </table>

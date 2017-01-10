@@ -6,68 +6,36 @@
 </head>
 <body>
 <ion-view view-title="Dashboard">
-  <ion-content >
+  <ion-content>
 	  <ion-header-bar align-title="center" class="bar-stable">
 		  <div class="buttons">
 			  <button ng-click="startScanning()" class="button">Search</button>
 		  </div>
-		  <h1 class="title">Title</h1>
+		  <h1 class="title">Your Docent</h1>
 		  <div class="buttons">
 			  <button id="bleStatus" class="button icon ion-bluetooth "></button>
 		  </div>
-		  <div class="buttons">
-			  <button ng-click="getOrganization()" id="OrgService" class="button ">Get Organization</button>
-			  
-		  </div>
 	  </ion-header-bar>
-      <ion-label class="item item-input">
-		 <span class="input-label" >Input:</span>
-		 <input type="text" value="" ng-model="myText">
-	 </ion-label>
-	 <table id="table-1">
-		 <thead>
-			 <tr>
-				 <th> -- ID --</th>
-				 <th> -- Name-- </th>
-				 <th> -- TAG --</th>
-				 <th> -- RSSI --</th>
-			 </tr>
-		 </thead>
-		 <tbody>
-		 <tr ng-repeat="device in devices"> 
-		 	
-				 <td><a ng-click="getResult({{device}})">{{device.id}}</a></td>
-	     		<td>{{device.name}}</td>
-	     		<td>{{device.tag}}</td>
-	     		<td>{{device.rssi}}</td>
-	     	</tr>
-     		
-			
-		 </tbody>
-		 
-	 </table>
-	  <table id="table-2">
-		 <thead>
-			 <tr>
-				 <th> -- Name-- </th>
-			 </tr>
-		 </thead>
-		 <tbody>
-		 <tr ng-repeat="org in list"> 
-
-	     		<td>{{org.name}}</td>
-	     	</tr>
-     		
-			
-		 </tbody>
-		 
-	 </table>
-     
-	  
-	    
-	 
-            
-     
+	  <div style="padding-top:40px;width:100%">
+		  <table style="width:100%">
+			 <thead>
+				 <tr>
+					 <th>Facility</th>
+					 <th>Location</th>
+					 <th>Exhibit</th>
+					 <th>Media Type</th>
+				 </tr>
+			 </thead>
+			 <tbody>
+				<tr ng-repeat="tag in exibitTags"> 
+					<td>{{tag.organizationName}}</td>
+					<td>{{tag.locationName}}</td>
+		     		<td><a ng-click="getMedia({{tag}})">{{tag.exhibitTagName}}</a></td>
+		     		<td>{{tag.exhibitTagMimeType}}</td>
+		     	</tr>
+			 </tbody>
+		  </table>
+	  </div>
   </ion-content>
 </ion-view>
 
