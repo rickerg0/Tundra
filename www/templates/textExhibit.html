@@ -1,5 +1,10 @@
 <ion-modal-view >
-  <ion-content class="padding">
-	<div>{{media.content}}</div>	 
-  </ion-content>
+	<ion-content class="padding" style="height:100%">
+		<div>{{media.content}}</div>	 
+	</ion-content>
+	<ion-footer-bar align-title="center">
+		<div class="buttons">
+			<button class="button button-positive" ng-click="modal.remove()">Close</button>
+	  	</div>
+	</ion-footer-bar>
 </ion-modal-view>
