@@ -19,20 +19,22 @@ angular.module('starter.controllers', [])
 	
 	$scope.getMedia = function (tag) {
 		ExhibitService.getExhibitTag(function(data,status){
+			
 			if (data.data) {
 				$scope.media=data.data
 			} else {
 				console.log("getResult: no data returned");
 				$scope.message = "no data returned"
 			}
+			
 			// get the right template based on mimetype
 			var templateUtl = '';
-			if ($scope.media.mimeType === 'text/plain') {
+			if (ExhibitService.isText($scope.media.mimeType)) {
 				templateUtl = 'templates/textExhibit.html'
-			} else if ($scope.media.mimeType === 'video/mpeg') {
-				templateUtl = 'templates/textExhibit.html'
-			} else if ($scope.media.mimeType === 'audio/mpeg3') {
-				templateUtl = 'templates/textExhibit.html'
+			} else if (ExhibitService.isAudio($scope.media.mimeType)) {
+				templateUtl = 'templates/audioExhibit.html'
+			} else if (ExhibitService.isVideo($scope.media.mimeType)) {
+				templateUtl = 'templates/videoExhibit.html'
 			}
 			
 			$ionicModal.fromTemplateUrl(templateUtl, {
