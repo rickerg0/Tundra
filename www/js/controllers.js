@@ -1,6 +1,6 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['base64'])
 
-.controller('DashCtrl', function($scope,BLEService,OrganizationService,ExhibitService,$ionicModal,$http) {
+.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,$ionicModal,$http) {
 	$scope.devices = [];
 	var isScanning = true;
 	$scope.myText = "Scan";
@@ -23,7 +23,13 @@ angular.module('starter.controllers', [])
 		ExhibitService.getExhibitTag(function(data,status){
 			
 			if (data.data) {
-				$scope.media=data.data
+				$scope.media=data.data;
+				//alert($scope.media.content);
+				//alert($scope.media.content.length);
+				//console.log($scope.media.content);
+				//$scope.media.content = $base64.decode($scope.media.content);
+				$scope.media.url = "data:"+$scope.media.mimeType + ";base64,"+$scope.media.content;
+				console.log($scope.media.url);
 			} else {
 				console.log("getResult: no data returned");
 				$scope.message = "no data returned"
@@ -35,7 +41,9 @@ angular.module('starter.controllers', [])
 				templateUtl = 'templates/textExhibit.html'
 			} else if (ExhibitService.isAudio($scope.media.mimeType)) {
 				templateUtl = 'templates/audioExhibit.html'
-			} else if (ExhibitService.isVideo($scope.media.mimeType)) {
+			} else if (ExhibitService.isImage($scope.media.mimeType)) {
+				templateUtl = 'templates/imageExhibit.html'
+			}else if (ExhibitService.isVideo($scope.media.mimeType)) {
 				templateUtl = 'templates/videoExhibit.html'
 			}
 			

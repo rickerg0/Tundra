@@ -21,11 +21,13 @@ angular.module('starter.services', [])
 	};
 	
 	this.isAudio=function(mimetype) {
-		return mimetype === 'audio/mpeg3';
+		return mimetype === 'audio/mp3';
 	};
-	
+	this.isImage=function(mimetype) {
+		return mimetype === 'image/jpg';
+	};
 	this.isVideo=function(mimetype) {
-		return mimetype === 'video/mpeg';
+		return mimetype === 'video/mp4';
 	};
 	
 }).service("BLEService", function($http){
