@@ -2,22 +2,15 @@ angular.module('starter.controllers', ['base64'])
 
 .controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,$ionicModal,$http) {
 	$scope.devices = [];
-	var isScanning = true;
-	$scope.myText = "Scan";
-	$scope.myColor ='danger';
 	$scope.exhibitService = ExhibitService;
 	
-	document.getElementById("bleStatus").style= "color:red;";
-	$scope.startScanning = function () {
+ 	$scope.startScanning = function () {
 		BLEService.connect(function(exibitTags) {
 			$scope.exibitTags = exibitTags;
-			console.log(exibitTags);
 		});
-		
-		$scope.myText =  "startScanning";
-		console.log($scope.myText);
-		isScanning = true;		
 	};
+	
+	$scope.startScanning();
 	
 	$scope.getMedia = function (media) {
 		ExhibitService.getExhibitTag(function(data,status){
@@ -25,7 +18,6 @@ angular.module('starter.controllers', ['base64'])
 			if (data.data) {
 				$scope.media=data.data;
 				$scope.media.url = "data:"+$scope.media.mimeType + ";base64,"+$scope.media.content;
-				console.log($scope.media.url);
 			} else {
 				console.log("getResult: no data returned");
 				$scope.message = "no data returned"

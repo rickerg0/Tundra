@@ -31,39 +31,31 @@ angular.module('starter.services', [])
 	};
 	
 }).service("BLEService", function($http){
-	var device={};			
-	var devices=[];
-	var that = this;
-	var onConnect = function(device) {
-	    device.name=device.name;
-		device.id=device.id;
-		device.rssi=device.rssi;
-		devices.push(device);
 
-		return devices;
-	 }
-	var onError = function() {
-	    device.name='none';
-		device.id='0';
-		device.rssi='0';
-		
-		return devices;	 
-	 }
-   
 	return {
 		connect:function(callback) {
-			var devices=[];
 			if (typeof(ble) != "undefined") {
-				ble.scan([], 30, onConnect, onError);
-				var exibitTags=[];
+				var devices=[];
+				// we have bluetooth, flip the button 
+	    		document.getElementById("bleStatus").style= "color:green;";
+	    		
+				ble.scan([], 30, function(device) {
+					devices.push(device);
+					return devices;
+				}, function() {
+					return devices;	 
+				});
+				
 				for (var i = 0; i < devices.length; i++) {
-					var d = devices[i];
-					console.log(d);
-					$http({ url:"http://127.0.0.1:8080/TundraService/tag/"+d.tag ,method:"GET"} ).then(function(data,status) {
+					console.log(devices[i]);
+					$http({ url:"http://127.0.0.1:8080/TundraService/tag/"+devices[i].id ,method:"GET"} ).then(function(data,status) {
 						callback(data.data);
 					},function(){ console.log("failed")});
 				}
 			} else {
+				//no bluetooth
+				document.getElementById("bleStatus").style= "color:red;";
+				
 				$http({ url:"http://127.0.0.1:8080/TundraService/tag/list" ,method:"GET"} ).then(function(data,status) {
 					callback(data.data)					
 				},function(){ console.log("failed")});
