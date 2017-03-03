@@ -28,15 +28,17 @@
 			 </thead>
 			 <tbody>
 				<tr ng-repeat="tag in exibitTags"> 
-					<td><a ng-click="getMedia({{tag}})">{{tag.organizationName}}</a></td>
-					<td><a ng-click="getMedia({{tag}})">{{tag.locationName}}</a></td>
-		     		<td><a ng-click="getMedia({{tag}})">{{tag.exhibitTagName}}</a></td>
+					<td>{{tag.organizationName}}</td>
+					<td>{{tag.locationName}}</td>
+		     		<td>{{tag.exhibitTagName}}</td>
 		     		<td>
-		     			<a ng-click="getMedia({{tag}})">
-		     				<i ng-if="exhibitService.isText(tag.exhibitTagMimeType)" class="icon ion-document"></i>
-		     				<i ng-if="exhibitService.isAudio(tag.exhibitTagMimeType)" class="icon ion-headphone"></i>
-		     				<i ng-if="exhibitService.isVideo(tag.exhibitTagMimeType)" class="icon ion-videocamera"></i>
-			     		</a>
+						<span ng-repeat="media in tag.mediaSet"> 
+			     			<a ng-click="getMedia({{media}})">
+			     				<i ng-if="exhibitService.isText(media.exhibitTagMimeType)" class="icon ion-document"></i>
+			     				<i ng-if="exhibitService.isAudio(media.exhibitTagMimeType)" class="icon ion-headphone"></i>
+			     				<i ng-if="exhibitService.isVideo(media.exhibitTagMimeType)" class="icon ion-videocamera"></i>
+				     		</a>
+			     		</span>
 		     		</td>
 		     	</tr>
 			 </tbody>

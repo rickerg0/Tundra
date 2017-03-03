@@ -11,9 +11,9 @@ angular.module('starter.services', [])
 	
 }).service("ExhibitService", function($http){
 	
-	this.getExhibitTag=function(callback,tag){
-		console.log(tag);
-		$http({ url:"http://127.0.0.1:8080/TundraService/tag/media/"+tag.exhibitTagTag ,method:"GET"} ).then(callback,function(){ console.log("failed")});
+	this.getExhibitTag=function(callback,media){
+		console.log(media);
+		$http({ url:"http://127.0.0.1:8080/TundraService/tag/media/"+media.exhibitTagMediaId ,method:"GET"} ).then(callback,function(){ console.log("failed")});
 	};
 
 	this.isText=function(mimetype) {
@@ -60,41 +60,20 @@ angular.module('starter.services', [])
 					var d = devices[i];
 					console.log(d);
 					$http({ url:"http://127.0.0.1:8080/TundraService/tag/"+d.tag ,method:"GET"} ).then(function(data,status) {
-						for (var i = 0; i< data.data.length; i++) {
-							exibitTags.push({organizationName:data.data[i].organizationName,locationName:data.data[i].locationName,exhibitTagName:data.data[i].exhibitTagName,exhibitTagId:data.data[i].exhibitTagId,exhibitTagTag:data.data[i].exhibitTagTag,exhibitTagMimeType:data.data[i].exhibitTagMimeType});
-						}
-						callback(exibitTags);
+						callback(data.data);
 					},function(){ console.log("failed")});
 				}
 			} else {
 				$http({ url:"http://127.0.0.1:8080/TundraService/tag/list" ,method:"GET"} ).then(function(data,status) {
-					
-					for (var i = 0; i< data.data.length; i++) {
-						devices.push({name:data.data[i].name,id:data.data[i].id,tag:data.data[i].tag,rssi:i});
-					}
-
-					var exibitTags=[];
-					for (var i = 0; i < devices.length; i++) {
-						var d = devices[i];
-						$http({ url:"http://127.0.0.1:8080/TundraService/tag/"+d.tag ,method:"GET"} ).then(function(data,status) {
-							exibitTags.push({organizationName:data.data.organizationName,locationName:data.data.locationName,exhibitTagName:data.data.exhibitTagName,exhibitTagId:data.data.exhibitTagId,exhibitTagTag:data.data.exhibitTagTag,exhibitTagMimeType:data.data.exhibitTagMimeType});
-							callback(exibitTags);
-						},function(){ console.log("failed")});
-					}
+					callback(data.data)					
 				},function(){ console.log("failed")});
 
 			}
-			
-			
 		},
 		disconnect:function(device) {
 			
 		}
 	}
-}
-		
-
-
-);
+});
 
 

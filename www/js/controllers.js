@@ -19,7 +19,7 @@ angular.module('starter.controllers', ['base64'])
 		isScanning = true;		
 	};
 	
-	$scope.getMedia = function (tag) {
+	$scope.getMedia = function (media) {
 		ExhibitService.getExhibitTag(function(data,status){
 			
 			if (data.data) {
@@ -55,7 +55,7 @@ angular.module('starter.controllers', ['base64'])
 				     $scope.modal.show();
 				 }
 			 );
-		},tag);
+		},media);
 	};
 	
 	
