@@ -1,51 +1,31 @@
-<!DOCTYPE html>
-
-<html>
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-<ion-view view-title="Dashboard">
-  <ion-content>
-	  <ion-header-bar align-title="center" class="bar-stable">
-		  <div class="buttons">
-			  <button ng-click="startScanning()" class="button">Search</button>
-		  </div>
-		  <h1 class="title">Available Exhibits</h1>
-		  <div class="buttons">
-			  <button id="bleStatus" class="button icon ion-bluetooth"></button>
-		  </div>
-	  </ion-header-bar>
-	  <div style="padding-top:40px;width:100%">
-		  <table style="width:100%">
-			 <thead>
-				 <tr>
-					 <th>Facility</th>
-					 <th>Location</th>
-					 <th>Exhibit</th>
-					 <th></th>
-				 </tr>
-			 </thead>
-			 <tbody>
-				<tr ng-repeat="tag in exibitTags"> 
-					<td>{{tag.organizationName}}</td>
-					<td>{{tag.locationName}}</td>
-		     		<td>{{tag.exhibitTagName}}</td>
-		     		<td>
-						<span ng-repeat="media in tag.mediaSet"> 
-			     			<a ng-click="getMedia({{media}})">
-			     				<i ng-if="exhibitService.isText(media.exhibitTagMimeType)" class="icon ion-document"></i>
-			     				<i ng-if="exhibitService.isAudio(media.exhibitTagMimeType)" class="icon ion-headphone"></i>
-			     				<i ng-if="exhibitService.isVideo(media.exhibitTagMimeType)" class="icon ion-videocamera"></i>
-				     		</a>
-			     		</span>
-		     		</td>
-		     	</tr>
-			 </tbody>
-		  </table>
-	  </div>
-  </ion-content>
-</ion-view>
-
-</body>
-</html>
+<ion-view view-title="Exhibits">
+	<ion-header-bar align-title="center" class="bar-stable">
+		<div class="buttons">
+			<button ng-click="startScanning()"
+				class="button button-positive icon ion-ios-refresh-empty button-clear"></button>
+		</div>
+		<h1 class="title">Available Exhibits</h1>
+		<div class="buttons">
+			<button id="bleStatus" class="button icon ion-bluetooth button-clear"></button>
+		</div>
+	</ion-header-bar> 
+	<ion-content>
+		<div ng-repeat="tag in exibitTags" class="item item-button-right">
+			<a ng-click="toggleTag(tag)" ng-class="{active: isTagShown(tag)}">
+				{{tag.exhibitTagName}}
+			</a>
+			<div class="buttons">
+				<span ng-repeat="media in tag.mediaSet">
+					<button class="button" ng-click="getMedia({{media}})">
+						<i ng-if="exhibitService.isText(media.exhibitTagMimeType)" class="icon ion-document"></i>
+						<i ng-if="exhibitService.isAudio(media.exhibitTagMimeType)" class="icon ion-headphone"></i> 
+						<i ng-if="exhibitService.isVideo(media.exhibitTagMimeType)" class="icon ion-videocamera"></i>
+					</button>
+				</span>
+			</div>
+			<div class="item-accordion" style="padding-top:5px;white-space: normal" ng-show="isTagShown(tag)">
+	            The {{tag.exhibitTagName}} is located in the {{tag.locationName}} at {{tag.organizationName}}
+	         </div>		
+		</div>
+	</ion-content>
+</ion-view>		

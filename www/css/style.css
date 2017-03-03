@@ -21,3 +21,18 @@
 	height: 100%;
     width: 100%;
 }
+
+.list .item.item-accordion {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    white-space: normal !important;
+}
+
+.list .item.item-accordion.ng-hide {
+    line-height: 0px;
+}
+
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+    display: block !important;
+}

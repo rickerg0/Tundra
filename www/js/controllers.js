@@ -58,12 +58,23 @@ angular.module('starter.controllers', ['base64'])
 		},media);
 	};
 	
-	
-	$scope.getOrganization = function (deviceID) {
-		console.log("getOrganization");
-		OrganizationService.getList(function(data,status){ 
-			$scope.list=data.data
-			} );
+
+	$scope.toggleTag = function(tag) {
+		if ($scope.isTagShown(tag)) {
+			$scope.shownTag = null;
+		} else {
+			$scope.shownTag = tag;
+		}
+	};
 		
+	$scope.isTagShown = function(tag) {
+		return (typeof tag !== "undefined" && $scope.shownTag === tag);
+	};
+		
+	$scope.getOrganization = function(deviceID) {
+		console.log("getOrganization");
+		OrganizationService.getList(function(data, status) {
+			$scope.list = data.data
+		});
 	};
 });
