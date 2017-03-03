@@ -24,10 +24,6 @@ angular.module('starter.controllers', ['base64'])
 			
 			if (data.data) {
 				$scope.media=data.data;
-				//alert($scope.media.content);
-				//alert($scope.media.content.length);
-				//console.log($scope.media.content);
-				//$scope.media.content = $base64.decode($scope.media.content);
 				$scope.media.url = "data:"+$scope.media.mimeType + ";base64,"+$scope.media.content;
 				console.log($scope.media.url);
 			} else {
