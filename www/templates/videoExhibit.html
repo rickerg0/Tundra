@@ -1,7 +1,7 @@
 <ion-modal-view >
     <ion-content class="padding">
-	    <div class="modal fullscreen-player" ng-click="closeModal()">
-			<video style="height:300px" type="{{media.mimeType}}" ng-src="{{media.url}}" class="centerme" controls="controls" autoplay></video>
+	    <div ng-click="closeModal()">
+			<video type="{{media.mimeType}}" ng-src="{{media.url}}" class="fullsize centerme" controls="controls" autoplay></video>
 		</div>	 
     </ion-content>
 	<ion-footer-bar>

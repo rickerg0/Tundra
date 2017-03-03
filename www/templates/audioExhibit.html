@@ -1,7 +1,9 @@
 
 <ion-modal-view >
     <ion-content class="padding">
-        UNSUPPORTED FUNCTIONALITY
+	    <div ng-click="closeModal()">
+			<audio type="{{media.mimeType}}" ng-src="{{media.url}}" class="fullsize centerme" controls="controls" autoplay></audio>
+		</div>	 
     </ion-content>
 	<ion-footer-bar>
 		<button class="button button-full button-positive" ng-click="modal.remove()">Close</button>
