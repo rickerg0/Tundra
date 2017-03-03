@@ -1,5 +1,6 @@
 <ion-modal-view >
     <ion-content class="padding">
+    	<div>{{media.description}}</div>
 	    <div ng-click="closeModal()">
 			<video type="{{media.mimeType}}" ng-src="{{media.url}}" class="fullsize centerme" controls="controls" autoplay></video>
 		</div>	 

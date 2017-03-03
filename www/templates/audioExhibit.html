@@ -2,6 +2,7 @@
 <ion-modal-view >
     <ion-content class="padding">
 	    <div ng-click="closeModal()">
+	    	<div>{{media.description}}</div>
 			<audio type="{{media.mimeType}}" ng-src="{{media.url}}" class="fullsize centerme" controls="controls" autoplay></audio>
 		</div>	 
     </ion-content>
