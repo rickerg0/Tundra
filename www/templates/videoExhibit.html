@@ -1,16 +1,10 @@
 <ion-modal-view >
     <ion-content class="padding">
 	    <div class="modal fullscreen-player" ng-click="closeModal()">
-		
-		<video style="height:300px" type="video/mp4" ng-src="{{media.url}}" class="centerme" controls="controls" autoplay>
-		 
-		
-		</video>
+			<video style="height:300px" type="{{media.mimeType}}" ng-src="{{media.url}}" class="centerme" controls="controls" autoplay></video>
 		</div>	 
     </ion-content>
-	<ion-footer-bar align-title="center">
-		<div class="buttons">
-			<button class="button button-positive" ng-click="modal.remove()">Close</button>
-	  	</div>
+	<ion-footer-bar>
+		<button class="button button-full button-positive" ng-click="modal.remove()">Close</button>
 	</ion-footer-bar>
 </ion-modal-view>

@@ -9,3 +9,9 @@
 .active .modal-backdrop-bg {
     opacity: 0.5;
 }
+
+.bar-footer {
+    height: 42px;
+    padding: 0;
+    margin: 0;
+}
