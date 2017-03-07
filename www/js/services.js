@@ -4,16 +4,25 @@ angular.module('starter.services', [])
 .service("LoginService", function($http){
 	var token='';
 	
-	this.login=function() {
-		$http({ url:baseServerUrl + "/TundraService/login?firstName=&lastName=&email=" ,method:"GET"} ).then(function(data,status) {
+	var _login=function() {
+		// return the promise as we'll need that to delay the initial scan 
+		return $http({ url:baseServerUrl + "/TundraService/login?firstName=&lastName=&email=" ,method:"GET"} ).then(function(data,status) {
 			token=data.data.token;
 		},function(data,status){ console.log("failed")});
 	};
 	
-	this.login();
+	// catch the promise from the initial login
+	var promise = _login();
 	
-	this.getToken=function() {
+	var _getToken=function() {
 		return token;
+	}
+	// return the initial promise along with the functions so 
+	// the controller creation can key off of that
+	return {
+		initialLoginPromise: promise,
+		login: _login,
+		getToken: _getToken
 	}
 	
 }).service("OrganizationService", function($http,LoginService){

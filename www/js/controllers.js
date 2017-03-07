@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['base64'])
 
-.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,$ionicModal,$http) {
+.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,LoginService,$ionicModal,$http) {
 	$scope.devices = [];
 	$scope.exhibitService = ExhibitService;
 	
@@ -10,7 +10,9 @@ angular.module('starter.controllers', ['base64'])
 		});
 	};
 	
-	//$scope.startScanning();
+	LoginService.initialLoginPromise.then(function(){
+		$scope.startScanning();
+	});
 	
 	$scope.getMedia = function (media) {
 		ExhibitService.getExhibitTag(function(data,status){
