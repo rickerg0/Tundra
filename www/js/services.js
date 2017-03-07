@@ -1,19 +1,32 @@
 angular.module('starter.services', [])
 
 
-.service("OrganizationService", function($http){
-	this.getList=function(callback){
-		$http({ url:baseServerUrl + "/TundraService/org/list" ,method:"GET"} ).then(callback,function(){ console.log("failed")});
+.service("LoginService", function($http){
+	this.token='';
+	var that=this;
+	this.login=function() {
+		$http({ url:baseServerUrl + "/TundraService/login?firstName=&lastName=&email=" ,method:"GET"} ).then(function(data,status) {
+			that.token=data.data.token;
+		},function(data,status){ console.log("failed")});
 	};
-	//CloudService.request(params).then(function(response){
-		// Response from server
-	//});
+	this.login();
 	
-}).service("ExhibitService", function($http){
+}).service("OrganizationService", function($http,LoginService){
+	this.getList=function(callback){
+		$http({ 
+			url:baseServerUrl + "/TundraService/org/list" ,
+			headers: {'X-Token':LoginService.token},
+			method:"GET"}).then(callback,function(){ console.log(data)});
+	};
+	 
+}).service("ExhibitService", function($http,LoginService){
 	
 	this.getExhibitTag=function(callback,media){
 		console.log(media);
-		$http({ url:baseServerUrl + "/TundraService/tag/media/"+media.exhibitTagMediaId ,method:"GET"} ).then(callback,function(){ console.log("failed")});
+		$http({ 
+			url:baseServerUrl + "/TundraService/tag/media/"+media.exhibitTagMediaId ,
+			headers: {'X-Token':LoginService.token},
+			method:"GET"} ).then(callback,function(data,status){ console.log(data)});
 	};
 
 	this.isText=function(mimetype) {
@@ -30,7 +43,7 @@ angular.module('starter.services', [])
 		return mimetype === 'video/mp4';
 	};
 	
-}).service("BLEService", function($http){
+}).service("BLEService", function($http,LoginService){
 
 	return {
 		connect:function(callback) {
@@ -49,9 +62,14 @@ angular.module('starter.services', [])
 				var deviceSummaries = [];
 				for (var i = 0; i < devices.length; i++) {
 					console.log(devices[i]);
-					$http({ url:baseServerUrl + "/TundraService/tag/"+devices[i].id ,method:"GET"} ).then(function(data,status) {
+					
+					$http({
+						method:"GET",
+						url:baseServerUrl + "/TundraService/tag/"+devices[i].id ,
+						headers: {'X-Token':LoginService.token},
+						}).then(function(data,status) {
 						deviceSummaries.push(data.data);
-					},function(){ console.log("failed")});
+					},function(data,status){ console.log(data)});
 				}
 				// now that we have the entire list, call the callback
 				callback(data.data);
@@ -59,9 +77,12 @@ angular.module('starter.services', [])
 				//no bluetooth
 				document.getElementById("bleStatus").style= "color:red;";
 				
-				$http({ url:baseServerUrl + "/TundraService/tag/list" ,method:"GET"} ).then(function(data,status) {
+				$http({ 
+					url:baseServerUrl + "/TundraService/tag/list" ,
+					headers: {'X-Token':LoginService.token},
+					method:"GET"} ).then(function(data,status) {
 					callback(data.data)					
-				},function(){ console.log("failed")});
+				},function(data,status){ console.log(data)});
 
 			}
 		},
