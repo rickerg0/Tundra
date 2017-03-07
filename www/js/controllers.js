@@ -10,7 +10,7 @@ angular.module('starter.controllers', ['base64'])
 		});
 	};
 	
-	$scope.startScanning();
+	//$scope.startScanning();
 	
 	$scope.getMedia = function (media) {
 		ExhibitService.getExhibitTag(function(data,status){

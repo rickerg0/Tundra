@@ -2,20 +2,25 @@ angular.module('starter.services', [])
 
 
 .service("LoginService", function($http){
-	this.token='';
-	var that=this;
+	var token='';
+	
 	this.login=function() {
 		$http({ url:baseServerUrl + "/TundraService/login?firstName=&lastName=&email=" ,method:"GET"} ).then(function(data,status) {
-			that.token=data.data.token;
+			token=data.data.token;
 		},function(data,status){ console.log("failed")});
 	};
+	
 	this.login();
+	
+	this.getToken=function() {
+		return token;
+	}
 	
 }).service("OrganizationService", function($http,LoginService){
 	this.getList=function(callback){
 		$http({ 
 			url:baseServerUrl + "/TundraService/org/list" ,
-			headers: {'X-Token':LoginService.token},
+			headers: {'X-Token':LoginService.getToken()},
 			method:"GET"}).then(callback,function(){ console.log(data)});
 	};
 	 
@@ -25,7 +30,7 @@ angular.module('starter.services', [])
 		console.log(media);
 		$http({ 
 			url:baseServerUrl + "/TundraService/tag/media/"+media.exhibitTagMediaId ,
-			headers: {'X-Token':LoginService.token},
+			headers: {'X-Token':LoginService.getToken()},
 			method:"GET"} ).then(callback,function(data,status){ console.log(data)});
 	};
 
@@ -66,7 +71,7 @@ angular.module('starter.services', [])
 					$http({
 						method:"GET",
 						url:baseServerUrl + "/TundraService/tag/"+devices[i].id ,
-						headers: {'X-Token':LoginService.token},
+						headers: {'X-Token':LoginService.getToken()},
 						}).then(function(data,status) {
 						deviceSummaries.push(data.data);
 					},function(data,status){ console.log(data)});
@@ -79,7 +84,7 @@ angular.module('starter.services', [])
 				
 				$http({ 
 					url:baseServerUrl + "/TundraService/tag/list" ,
-					headers: {'X-Token':LoginService.token},
+					headers: {'X-Token':LoginService.getToken()},
 					method:"GET"} ).then(function(data,status) {
 					callback(data.data)					
 				},function(data,status){ console.log(data)});
