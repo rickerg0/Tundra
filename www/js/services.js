@@ -1,45 +1,38 @@
-angular.module('starter.services', [])
+angular.module('tundra.services', [])
 
 
-.service("LoginService", function($http){
-	var token='';
+.service("InitialLoginService", function($http){
 	
 	var _login=function() {
 		// return the promise as we'll need that to delay the initial scan 
 		return $http({ url:baseServerUrl + "/TundraService/login?firstName=&lastName=&email=" ,method:"GET"} ).then(function(data,status) {
-			token=data.data.token;
-		},function(data,status){ console.log("failed")});
+			creds.token=data.data.token;
+		},function(data,status){ console.log(data)});
 	};
 	
 	// catch the promise from the initial login
 	var promise = _login();
 	
-	var _getToken=function() {
-		return token;
-	}
 	// return the initial promise along with the functions so 
 	// the controller creation can key off of that
 	return {
-		initialLoginPromise: promise,
-		login: _login,
-		getToken: _getToken
+		initialLoginPromise: promise
 	}
 	
-}).service("OrganizationService", function($http,LoginService){
+})
+.service("OrganizationService", function($http){
 	this.getList=function(callback){
 		$http({ 
 			url:baseServerUrl + "/TundraService/org/list" ,
-			headers: {'X-Token':LoginService.getToken()},
 			method:"GET"}).then(callback,function(){ console.log(data)});
 	};
 	 
-}).service("ExhibitService", function($http,LoginService){
+}).service("ExhibitService", function($http){
 	
 	this.getExhibitTag=function(callback,media){
 		console.log(media);
 		$http({ 
 			url:baseServerUrl + "/TundraService/tag/media/"+media.exhibitTagMediaId ,
-			headers: {'X-Token':LoginService.getToken()},
 			method:"GET"} ).then(callback,function(data,status){ console.log(data)});
 	};
 
@@ -57,7 +50,7 @@ angular.module('starter.services', [])
 		return mimetype === 'video/mp4';
 	};
 	
-}).service("BLEService", function($http,LoginService){
+}).service("BLEService", function($http){
 
 	return {
 		connect:function(callback) {
@@ -80,7 +73,6 @@ angular.module('starter.services', [])
 					$http({
 						method:"GET",
 						url:baseServerUrl + "/TundraService/tag/"+devices[i].id ,
-						headers: {'X-Token':LoginService.getToken()},
 						}).then(function(data,status) {
 						deviceSummaries.push(data.data);
 					},function(data,status){ console.log(data)});
@@ -93,7 +85,6 @@ angular.module('starter.services', [])
 				
 				$http({ 
 					url:baseServerUrl + "/TundraService/tag/list" ,
-					headers: {'X-Token':LoginService.getToken()},
 					method:"GET"} ).then(function(data,status) {
 					callback(data.data)					
 				},function(data,status){ console.log(data)});

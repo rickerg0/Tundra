@@ -1,6 +1,6 @@
-angular.module('starter.controllers', ['base64'])
+angular.module('tundra.controllers', ['base64'])
 
-.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,LoginService,$ionicModal,$http) {
+.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,InitialLoginService,$ionicModal,$http) {
 	$scope.devices = [];
 	$scope.exhibitService = ExhibitService;
 	
@@ -10,7 +10,7 @@ angular.module('starter.controllers', ['base64'])
 		});
 	};
 	
-	LoginService.initialLoginPromise.then(function(){
+	InitialLoginService.initialLoginPromise.then(function(){
 		$scope.startScanning();
 	});
 	
