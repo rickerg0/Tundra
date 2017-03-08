@@ -24,8 +24,10 @@ main.run(function($ionicPlatform) {
 main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, $provide) {
 	$sceDelegateProvider.resourceUrlWhitelist(['**']);
 	
-    $httpProvider.interceptors.push(function ($q, $injector/*, $ionicLoading*/) {
+    $httpProvider.interceptors.push(function ($q, $injector) {
+    	
     	var canRetry = true;
+    	
 	    function retry(httpConfig) {
 	    	if (canRetry === true) {
 		        canRetry = false;
@@ -44,13 +46,12 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
 						console.log(data)
 					}
 				);
-		        
 	    	}
 	    }
 
 	    return {
     		request: function(request) {
-	    		$injector.get("$ionicLoading").show({content: "Loading...", showBackdrop: true, maxWidth: 200, showDelay: 100});
+	    		$injector.get("$ionicLoading").show({content: "Loading...", showBackdrop: true, showDelay: 100});
 	    		request.headers['X-Token'] = creds.token;
 		    	return request || $q.when(request);
 	      	},
@@ -64,6 +65,7 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
 	            }
 	            return $q.reject(response);
 	        }
+	        
 	    };
 	});  	
 	
