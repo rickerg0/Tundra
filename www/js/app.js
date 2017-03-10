@@ -28,7 +28,7 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
     	
     	var canRetry = true;
     	
-	    function retry(httpConfig) {
+	    function retry(httpConfig, deferred) {
 	    	if (canRetry === true) {
 		        canRetry = false;
 		        var $http = $injector.get('$http');
@@ -39,8 +39,16 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
 				).then(
 					function(data,status) {
 						canRetry = true;
+						// get the new token
 						creds.token=data.data.token;
-						return $http(httpConfig);
+						// make sure to set it on the header
+						httpConfig.headers['X-Token'] = creds.token;
+						// TODO: this is the right track, just not quite there yet
+						$http(httpConfig).then(function (response) {
+							deferred.resolve(response);
+						}, function (response) {
+							deferred.reject(response);
+						});
 					},
 	        		function(data,status){ 
 						console.log(data)
@@ -50,10 +58,10 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
 	    }
 
 	    return {
-    		request: function(request) {
+    		request: function(config) {
 	    		$injector.get("$ionicLoading").show({content: "Loading...", showBackdrop: true, showDelay: 100});
-	    		request.headers['X-Token'] = creds.token;
-		    	return request || $q.when(request);
+	    		config.headers['X-Token'] = creds.token;
+		    	return config || $q.when(config);
 	      	},
 	      	response: function(response) {
 	      		$injector.get("$ionicLoading").hide();
@@ -61,7 +69,8 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
 	      	},
 	        responseError: function (response) {
 	            if (response.status === 403) {
-	                return retry(response.config);
+	            	var deferred = $q.defer();
+	                retry(response.config, deferred);
 	            }
 	            return $q.reject(response);
 	        }
