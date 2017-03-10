@@ -43,7 +43,7 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
 						creds.token=data.data.token;
 						// make sure to set it on the header
 						httpConfig.headers['X-Token'] = creds.token;
-						// TODO: this is the right track, just not quite there yet
+						// retry the original request
 						$http(httpConfig).then(function (response) {
 							deferred.resolve(response);
 						}, function (response) {
@@ -71,6 +71,7 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
 	            if (response.status === 403) {
 	            	var deferred = $q.defer();
 	                retry(response.config, deferred);
+	                return deferred.promise;
 	            }
 	            return $q.reject(response);
 	        }
