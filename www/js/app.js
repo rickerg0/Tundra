@@ -1,14 +1,23 @@
 var baseServerUrl='http://127.0.0.1:8080';
 var creds = {
 	token:'',
-	platform: ''
+	platform: '',
+	firstName:'',
+	lastName:'',
+	email:''
 }
 
 var main = angular.module('tundra', ['ionic', 'tundra.controllers', 'tundra.services']);
 
 main.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+	  
+	  document.addEventListener("deviceready", onDeviceReady, false);
+	  function onDeviceReady() {
+	      console.log(device.cordova);
+	  }
+	  
+	  // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -21,6 +30,15 @@ main.run(function($ionicPlatform) {
     }
     
     creds.platform = ionic.Platform.platform();
+    window.localStorage.clear();
+    
+    creds.firstName = window.localStorage.getItem("firstName");
+    creds.lastName = window.localStorage.getItem("lastName");
+    creds.email = window.localStorage.getItem("email");
+    //creds.uuid = window.device.getUUID(); 
+    
+    console.log(creds);
+    //console.log(window.device);
   });
 });
 
@@ -37,7 +55,7 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
 		        var $http = $injector.get('$http');
 		        
 				$http({ 
-					url:baseServerUrl + "/TundraService/login?firstName=&lastName=&email=",
+					url:baseServerUrl + "/TundraService/login?email=" + creds.email,
 					method:"GET"} 
 				).then(
 					function(data,status) {
@@ -102,8 +120,12 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
       }
     }
   })
-
+  .state('signup', {
+      url: '/signup',
+      templateUrl: 'templates/signUp.html',
+      controller: 'SignUpCtrl'
+  })
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/signup');
 
 });

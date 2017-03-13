@@ -1,5 +1,36 @@
 angular.module('tundra.controllers', ['base64'])
 
+.controller('SignUpCtrl', function($scope, $state,$http) {
+    // one time registration screen
+	// is this a registered device?
+	if (!creds.email || 0 === creds.email.length) {
+		$scope.signUp = function(user) {
+
+			//console.log($cordovaDevice.getUUID());
+			
+			creds.firstName = user.firstName;
+			creds.lastName = user.lastName;
+			creds.email = user.email;
+		    
+			window.localStorage.setItem("firstName", user.firstName);
+			window.localStorage.setItem("lastName", user.lastName);
+			window.localStorage.setItem("email", user.email);
+			console.log( window.device );
+			
+			$http({ url:baseServerUrl + "/TundraService/register?email=" + user.email + 
+													"&firstName=" + user.firstName+ "&lastName=" + user.lastName + 
+													"&platform=" + creds.platform + "&deviceId=",method:"GET"} )
+					.then(function(data,status) {
+						console.log("registered");
+						$state.go('tab.dash');
+						},
+					    function(data,status){ console.log(data)});
+		};
+	} else {
+		$state.go('tab.dash');
+	}
+})
+
 .controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,InitialLoginService,$ionicModal,$http) {
 	$scope.devices = [];
 	$scope.exhibitService = ExhibitService;
