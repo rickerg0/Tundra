@@ -1,6 +1,7 @@
 var baseServerUrl='http://127.0.0.1:8080';
 var creds = {
-	token:''
+	token:'',
+	platform: ''
 }
 
 var main = angular.module('tundra', ['ionic', 'tundra.controllers', 'tundra.services']);
@@ -18,6 +19,8 @@ main.run(function($ionicPlatform) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    
+    creds.platform = ionic.Platform.platform();
   });
 });
 
