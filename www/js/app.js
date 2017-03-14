@@ -35,7 +35,19 @@ main.run(function($ionicPlatform) {
     creds.firstName = window.localStorage.getItem("firstName");
     creds.lastName = window.localStorage.getItem("lastName");
     creds.email = window.localStorage.getItem("email");
-    //creds.uuid = window.device.getUUID(); 
+    if ((typeof(window.device) != "undefined")) {
+    	/*
+    	 * device.cordova
+    	 * device.model
+    	 * device.platform
+    	 * device.uuid
+    	 * device.version
+    	 * device.manufacturer
+    	 * device.isVirtual
+    	 * device.serial
+    	 */
+    	creds.uuid = device.uuid;
+    }
     
     console.log(creds);
     //console.log(window.device);
