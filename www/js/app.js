@@ -20,17 +20,17 @@ main.run(function($ionicPlatform) {
 	  // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
-
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
     }
+    
     if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
+        // org.apache.cordova.statusbar required
+        StatusBar.styleDefault();
     }
     
     creds.platform = ionic.Platform.platform();
-    window.localStorage.clear();
+    //window.localStorage.clear();
     
     creds.firstName = window.localStorage.getItem("firstName");
     creds.lastName = window.localStorage.getItem("lastName");

@@ -32,6 +32,8 @@ angular.module('tundra.controllers', ['base64'])
 })
 
 .controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,InitialLoginService,$ionicModal,$http) {
+	
+	// define functions and data elements to be placed in the scope
 	$scope.devices = [];
 	$scope.exhibitService = ExhibitService;
 	
@@ -40,10 +42,6 @@ angular.module('tundra.controllers', ['base64'])
 			$scope.exibitTags = exibitTags;
 		});
 	};
-	
-	InitialLoginService.initialLoginPromise.then(function(){
-		$scope.startScanning();
-	});
 	
 	$scope.getMedia = function (media) {
 		ExhibitService.getExhibitTag(function(data,status){
@@ -98,4 +96,9 @@ angular.module('tundra.controllers', ['base64'])
 			$scope.list = data.data
 		});
 	};
+
+	InitialLoginService.initialLoginPromise.then(function(){
+		$scope.startScanning();
+	});
+
 });
