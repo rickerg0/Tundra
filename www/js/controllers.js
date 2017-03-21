@@ -11,10 +11,7 @@ angular.module('tundra.controllers', ['base64'])
 			creds.firstName = user.firstName;
 			creds.lastName = user.lastName;
 			creds.email = user.email;
-		    
-			window.localStorage.setItem("firstName", user.firstName);
-			window.localStorage.setItem("lastName", user.lastName);
-			window.localStorage.setItem("email", user.email);
+			
 			console.log( window.device );
 			
 			$http({ url:baseServerUrl + "/TundraService/register?email=" + user.email + 
@@ -22,6 +19,10 @@ angular.module('tundra.controllers', ['base64'])
 													"&platform=" + creds.platform + "&deviceId=",method:"GET"} )
 					.then(function(data,status) {
 						console.log("registered");
+						window.localStorage.setItem("firstName", user.firstName);
+						window.localStorage.setItem("lastName", user.lastName);
+						window.localStorage.setItem("email", user.email);
+
 						$state.go('tab.dash');
 						},
 					    function(data,status){ console.log(data)});
