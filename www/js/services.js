@@ -55,30 +55,28 @@ angular.module('tundra.services', [])
 	return {
 		connect:function(callback) {
 			if (typeof(ble) != "undefined") {
-				var devices=[];
+
 				// we have bluetooth, flip the button 
 	    		document.getElementById("bleStatus").style= "color:green;";
 	    		
 				ble.scan([], 30, function(device) {
-					devices.push(device);
-					return devices;
-				}, function() {
-					return devices;	 
-				});
-				
-				var deviceSummaries = [];
-				for (var i = 0; i < devices.length; i++) {
-					console.log(devices[i]);
-					
+					alert(JSON.stringify(device));
+					// we found a device, now lets see if it's ours
 					$http({
 						method:"GET",
-						url:baseServerUrl + "/TundraService/tag/"+devices[i].id ,
+						url:baseServerUrl + "/TundraService/tag/"+device.id ,
 						}).then(function(data,status) {
-						deviceSummaries.push(data.data);
-					},function(data,status){ console.log(data)});
-				}
-				// now that we have the entire list, call the callback
-				callback(data.data);
+							// the callback expects an array, so create one
+							var devices=[];
+							devices.push(data.data);
+							// call callback
+							callback(devices);
+						},function(data,status){ console.log(data)});
+				}, function() {
+					alert("FAILURE");
+					console.log("FAILURE")
+				});
+				
 			} else {
 				//no bluetooth
 				document.getElementById("bleStatus").style= "color:red;";
