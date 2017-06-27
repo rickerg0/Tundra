@@ -12,7 +12,9 @@ var main = angular.module('tundra', ['ionic', 'tundra.controllers', 'tundra.serv
 
 main.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
-	  
+	  // Use this to clear registered device..
+	  //window.localStorage.clear();			
+
 	  document.addEventListener("deviceready", onDeviceReady, false);
 	  function onDeviceReady() {
 	      console.log(device.cordova);
