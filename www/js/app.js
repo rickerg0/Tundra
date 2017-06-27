@@ -1,4 +1,5 @@
-var baseServerUrl='http://127.0.0.1:8080';
+//var baseServerUrl='http://127.0.0.1:8080';
+var baseServerUrl='http://ec2-54-85-236-85.compute-1.amazonaws.com:8080';
 var creds = {
 	token:'',
 	platform: '',
