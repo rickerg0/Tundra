@@ -66,8 +66,11 @@ angular.module('tundra.services', [])
 						method:"GET",
 						url:baseServerUrl + "/TundraService/tag/"+device.id ,
 						}).then(function(data,status) {
-							// call callback with single record
-							callback(data.data);
+							// the callback expects an array, so create one
+							var devices=[];
+							devices.push(data.data);
+							// call callback
+							callback(devices);
 						},function(data,status){ console.log(data)});
 				}, function() {
 					alert("FAILURE");
@@ -81,12 +84,7 @@ angular.module('tundra.services', [])
 				$http({ 
 					url:baseServerUrl + "/TundraService/tag/list" ,
 					method:"GET"} ).then(function(data,status) {
-						if (data.data) {
-							// loop thru array and call callback with single record
-							for (var i = 0; i < data.data.length; i++) {
-								callback(data.data[i])					
-							}							
-						}
+					callback(data.data)					
 				},function(data,status){ console.log(data)});
 
 			}
