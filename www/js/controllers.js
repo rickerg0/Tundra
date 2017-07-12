@@ -39,9 +39,11 @@ angular.module('tundra.controllers', ['base64'])
 	$scope.exhibitService = ExhibitService;
 	
  	$scope.startScanning = function () {
- 		$scope.exibitTags=[];
-		BLEService.connect(function(exibitTags) {
-			$scope.exibitTags.pushValues(exibitTags);
+ 		// reset the array
+ 		$scope.exibitTags = [];
+		BLEService.connect(function(exibitTag) {
+			// the callback gets called multiple times so add to the array
+			$scope.exibitTags.push(exibitTag);
 		});
 	};
 	
