@@ -5,8 +5,8 @@ angular.module('tundra.services', [])
 	
 	var _login=function() {
 		// return the promise as we'll need that to delay the initial scan 
-		return $http({ url:$rootScope.baseServerUrl + "/TundraService/login?email=" + creds.email ,method:"GET"} ).then(function(data,status) {
-			creds.token=data.data.token;
+		return $http({ url:$rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email ,method:"GET"} ).then(function(data,status) {
+			$rootScope.creds.token=data.data.token;
 		},function(data,status){ console.log(data)});
 	};
 	

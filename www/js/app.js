@@ -1,11 +1,3 @@
-var creds = {
-	token:'',
-	platform: '',
-	firstName:'',
-	lastName:'',
-	email:''
-}
-
 var main = angular.module('tundra', ['ionic', 'tundra.controllers', 'tundra.services']);
 
 main.run(function($ionicPlatform,$rootScope) {
@@ -18,6 +10,15 @@ main.run(function($ionicPlatform,$rootScope) {
   $rootScope.itemCaption = "Exhibit";
   $rootScope.itemCaptionPlural = "Exhibits";
   $rootScope.appName = "My Tour Guide";
+  
+  // creds
+  $rootScope.creds = {
+    token:'',
+    platform: '',
+    firstName:'',
+    lastName:'',
+    email:''
+  }
 
   $ionicPlatform.ready(function() {
 	  // Use this to clear registered device..
@@ -40,12 +41,12 @@ main.run(function($ionicPlatform,$rootScope) {
         StatusBar.styleDefault();
     }
     
-    creds.platform = ionic.Platform.platform();
+    $rootScope.creds.platform = ionic.Platform.platform();
     //window.localStorage.clear();
     
-    creds.firstName = window.localStorage.getItem("firstName");
-    creds.lastName = window.localStorage.getItem("lastName");
-    creds.email = window.localStorage.getItem("email");
+    $rootScope.creds.firstName = window.localStorage.getItem("firstName");
+    $rootScope.creds.lastName = window.localStorage.getItem("lastName");
+    $rootScope.creds.email = window.localStorage.getItem("email");
     if ((typeof(window.device) != "undefined")) {
     	/*
     	 * device.cordova
@@ -57,71 +58,72 @@ main.run(function($ionicPlatform,$rootScope) {
     	 * device.isVirtual
     	 * device.serial
     	 */
-    	creds.uuid = device.uuid;
+    	$rootScope.creds.uuid = device.uuid;
     }
     
-    console.log(creds);
     //console.log(window.device);
   });
 });
 
-main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, $provide) {
-	$sceDelegateProvider.resourceUrlWhitelist(['**']);
-	
-    $httpProvider.interceptors.push(function ($q, $injector) {
-    	
-    	var canRetry = true;
-    	
-	    function retry(httpConfig, deferred) {
-	    	if (canRetry === true) {
-		        canRetry = false;
-		        var $http = $injector.get('$http');
-		        
-				$http({ 
-					url:baseServerUrl + "/TundraService/login?email=" + creds.email,
-					method:"GET"} 
-				).then(
-					function(data,status) {
-						canRetry = true;
-						// get the new token
-						creds.token=data.data.token;
-						// make sure to set it on the header
-						httpConfig.headers['X-Token'] = creds.token;
-						// retry the original request
-						$http(httpConfig).then(function (response) {
-							deferred.resolve(response);
-						}, function (response) {
-							deferred.reject(response);
-						});
-					},
-	        		function(data,status){ 
-						console.log(data)
-					}
-				);
-	    	}
-	    }
+main.service('httpInterceptor', function($rootScope, $q, $injector) {  
 
-	    return {
-    		request: function(config) {
-	    		$injector.get("$ionicLoading").show({content: "Loading...", showBackdrop: true, showDelay: 100});
-	    		config.headers['X-Token'] = creds.token;
-		    	return config || $q.when(config);
-	      	},
-	      	response: function(response) {
-	      		$injector.get("$ionicLoading").hide();
-		        return response || $q.when(response);
-	      	},
-	        responseError: function (response) {
-	            if (response.status === 403) {
-	            	var deferred = $q.defer();
-	                retry(response.config, deferred);
-	                return deferred.promise;
-	            }
-	            return $q.reject(response);
-	        }
+	var canRetry = true;
+	var interceptor = this;
+	
+	interceptor.retry = function(httpConfig, deferred) {
+    	if (canRetry === true) {
+	        canRetry = false;
+	        var $http = $injector.get('$http');
 	        
-	    };
-	});  	
+			$http({ 
+				url:$rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email,
+				method:"GET"} 
+			).then(
+				function(data,status) {
+					canRetry = true;
+					// get the new token
+					$rootScope.creds.token=data.data.token;
+					// make sure to set it on the header
+					httpConfig.headers['X-Token'] = $rootScope.creds.token;
+					// retry the original request
+					$http(httpConfig).then(function (response) {
+						deferred.resolve(response);
+					}, function (response) {
+						deferred.reject(response);
+					});
+				},
+        		function(data,status){ 
+					console.log(data)
+				}
+			);
+    	}
+    }
+
+    interceptor.request = function(config) {
+		$injector.get("$ionicLoading").show({content: "Loading...", showBackdrop: true, showDelay: 100});
+		config.headers['X-Token'] = $rootScope.creds.token;
+    	return config || $q.when(config);
+  	};
+  	
+  	interceptor.response = function(response) {
+  		$injector.get("$ionicLoading").hide();
+        return response || $q.when(response);
+  	};
+  	
+  	interceptor.responseError = function (response) {
+        if (response.status === 403) {
+        	var deferred = $q.defer();
+        	interceptor.retry(response.config, deferred);
+            return deferred.promise;
+        }
+        return $q.reject(response);
+    };
+            
+});
+
+main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, $provide) {
+  $sceDelegateProvider.resourceUrlWhitelist(['**']);
+  $httpProvider.interceptors.push("httpInterceptor");
 	
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router

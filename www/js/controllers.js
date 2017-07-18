@@ -3,20 +3,20 @@ angular.module('tundra.controllers', ['base64'])
 .controller('SignUpCtrl', function($scope, $state,$http) {
     // one time registration screen
 	// is this a registered device?
-	if (!creds.email || 0 === creds.email.length) {
+	if (!$rootScope.creds.email || 0 === $rootScope.creds.email.length) {
 		$scope.signUp = function(user) {
 
 			//console.log($cordovaDevice.getUUID());
 			
-			creds.firstName = user.firstName;
-			creds.lastName = user.lastName;
-			creds.email = user.email;
+			$rootScope.creds.firstName = user.firstName;
+			$rootScope.creds.lastName = user.lastName;
+			$rootScope.creds.email = user.email;
 			
 			console.log( window.device );
 			
 			$http({ url:$scope.baseServerUrl + "/TundraService/register?email=" + user.email + 
 													"&firstName=" + user.firstName+ "&lastName=" + user.lastName + 
-													"&platform=" + creds.platform + "&deviceId=",method:"GET"} )
+													"&platform=" + $rootScope.creds.platform + "&deviceId=",method:"GET"} )
 					.then(function(data,status) {
 						console.log("registered");
 						window.localStorage.setItem("firstName", user.firstName);
