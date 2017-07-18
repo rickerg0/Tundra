@@ -1,10 +1,10 @@
-<ion-view view-title="Exhibits">
+<ion-view view-title="Items">
 	<ion-header-bar align-title="center" class="bar-stable">
 		<div class="buttons">
 			<button ng-click="startScanning()"
 				class="button button-positive icon ion-ios-refresh-empty button-clear"></button>
 		</div>
-		<h1 class="title">Available Exhibits</h1>
+		<h1 class="title">Available {{itemCaptionPlural}}</h1>
 		<div class="buttons">
 			<button id="bleStatus" class="button icon ion-bluetooth button-clear"></button>
 		</div>
@@ -12,19 +12,19 @@
 	<ion-content>
 		<div ng-repeat="tag in exibitTags" class="item item-button-right">
 			<a ng-click="toggleTag(tag)" ng-class="{active: isTagShown(tag)}">
-				{{tag.exhibitTagName}}
+				{{tag.itemTagName}}
 			</a>
 			<div class="buttons">
 				<span ng-repeat="media in tag.mediaSet">
 					<button class="button" ng-click="getMedia({{media}})">
-						<i ng-if="exhibitService.isText(media.exhibitTagMimeType)" class="icon ion-document"></i>
-						<i ng-if="exhibitService.isAudio(media.exhibitTagMimeType)" class="icon ion-headphone"></i> 
-						<i ng-if="exhibitService.isVideo(media.exhibitTagMimeType)" class="icon ion-videocamera"></i>
+						<i ng-if="itemService.isText(media.itemTagMimeType)" class="icon ion-document"></i>
+						<i ng-if="itemService.isAudio(media.itemTagMimeType)" class="icon ion-headphone"></i> 
+						<i ng-if="itemService.isVideo(media.itemTagMimeType)" class="icon ion-videocamera"></i>
 					</button>
 				</span>
 			</div>
 			<div class="item-accordion" style="padding-top:15px;white-space: normal" ng-show="isTagShown(tag)">
-	            The {{tag.exhibitTagName}} is located in the {{tag.locationName}} at {{tag.organizationName}}
+	            The {{tag.itemTagName}} is located in the {{tag.locationName}} at {{tag.organizationName}}
 	         </div>		
 		</div>
 	</ion-content>

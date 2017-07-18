@@ -1,5 +1,3 @@
-//var baseServerUrl='http://127.0.0.1:8080';
-var baseServerUrl='http://ec2-54-85-236-85.compute-1.amazonaws.com:8080';
 var creds = {
 	token:'',
 	platform: '',
@@ -10,7 +8,17 @@ var creds = {
 
 var main = angular.module('tundra', ['ionic', 'tundra.controllers', 'tundra.services']);
 
-main.run(function($ionicPlatform) {
+main.run(function($ionicPlatform,$rootScope) {
+  // base server URLs
+  $rootScope.baseServerUrl='http://127.0.0.1:8080';
+  //$rootScope.baseServerUrl='http://ec2-54-85-236-85.compute-1.amazonaws.com:8080';
+
+  // captions, these are the labels that will change
+  // from implementation to implementation
+  $rootScope.itemCaption = "Exhibit";
+  $rootScope.itemCaptionPlural = "Exhibits";
+  $rootScope.appName = "My Tour Guide";
+
   $ionicPlatform.ready(function() {
 	  // Use this to clear registered device..
 	  //window.localStorage.clear();			

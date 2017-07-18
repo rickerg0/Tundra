@@ -1,11 +1,11 @@
 angular.module('tundra.services', [])
 
 
-.service("InitialLoginService", function($http){
+.service("InitialLoginService", function($http, $rootScope){
 	
 	var _login=function() {
 		// return the promise as we'll need that to delay the initial scan 
-		return $http({ url:baseServerUrl + "/TundraService/login?email=" + creds.email ,method:"GET"} ).then(function(data,status) {
+		return $http({ url:$rootScope.baseServerUrl + "/TundraService/login?email=" + creds.email ,method:"GET"} ).then(function(data,status) {
 			creds.token=data.data.token;
 		},function(data,status){ console.log(data)});
 	};
@@ -20,19 +20,19 @@ angular.module('tundra.services', [])
 	}
 	
 })
-.service("OrganizationService", function($http){
+.service("OrganizationService", function($http, $rootScope){
 	this.getList=function(callback){
 		$http({ 
-			url:baseServerUrl + "/TundraService/org/list" ,
+			url:$rootScope.baseServerUrl + "/TundraService/org/list" ,
 			method:"GET"}).then(callback,function(){ console.log(data)});
 	};
 	 
-}).service("ExhibitService", function($http){
+}).service("ItemService", function($http, $rootScope){
 	
-	this.getExhibitTag=function(callback,media){
+	this.getItemTag=function(callback,media){
 		console.log(media);
 		$http({ 
-			url:baseServerUrl + "/TundraService/tag/media/"+media.exhibitTagMediaId ,
+			url:$rootScope.baseServerUrl + "/TundraService/tag/media/"+media.itemTagMediaId ,
 			method:"GET"} ).then(callback,function(data,status){ console.log(data)});
 	};
 
@@ -50,7 +50,7 @@ angular.module('tundra.services', [])
 		return mimetype === 'video/mp4';
 	};
 	
-}).service("BLEService", function($http){
+}).service("BLEService", function($http, $rootScope){
 
 	return {
 		connect:function(callback) {
@@ -64,7 +64,7 @@ angular.module('tundra.services', [])
 					// we found a device, now lets see if it's ours
 					$http({
 						method:"GET",
-						url:baseServerUrl + "/TundraService/tag/"+device.id ,
+						url:$rootScope.baseServerUrl + "/TundraService/tag/"+device.id ,
 						}).then(function(data,status) {
 							// call callback with single record
 							callback(data.data);
@@ -79,7 +79,7 @@ angular.module('tundra.services', [])
 				document.getElementById("bleStatus").style= "color:red;";
 				
 				$http({ 
-					url:baseServerUrl + "/TundraService/tag/list" ,
+					url:$rootScope.baseServerUrl + "/TundraService/tag/list" ,
 					method:"GET"} ).then(function(data,status) {
 						if (data.data) {
 							// loop thru array and call callback with single record

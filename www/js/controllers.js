@@ -14,7 +14,7 @@ angular.module('tundra.controllers', ['base64'])
 			
 			console.log( window.device );
 			
-			$http({ url:baseServerUrl + "/TundraService/register?email=" + user.email + 
+			$http({ url:$scope.baseServerUrl + "/TundraService/register?email=" + user.email + 
 													"&firstName=" + user.firstName+ "&lastName=" + user.lastName + 
 													"&platform=" + creds.platform + "&deviceId=",method:"GET"} )
 					.then(function(data,status) {
@@ -32,23 +32,23 @@ angular.module('tundra.controllers', ['base64'])
 	}
 })
 
-.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ExhibitService,InitialLoginService,$ionicModal,$http) {
+.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ItemService,InitialLoginService,$ionicModal,$http) {
 	
 	// define functions and data elements to be placed in the scope
 	$scope.devices = [];
-	$scope.exhibitService = ExhibitService;
+	$scope.itemService = ItemService;
 	
  	$scope.startScanning = function () {
  		// reset the array
  		$scope.exibitTags = [];
-		BLEService.connect(function(exibitTag) {
+		BLEService.connect(function(tag) {
 			// the callback gets called multiple times so add to the array
-			$scope.exibitTags.push(exibitTag);
+			$scope.exibitTags.push(tag);
 		});
 	};
 	
 	$scope.getMedia = function (media) {
-		ExhibitService.getExhibitTag(function(data,status){
+		ItemService.getItemTag(function(data,status){
 			
 			if (data.data) {
 				$scope.media=data.data;
@@ -60,14 +60,14 @@ angular.module('tundra.controllers', ['base64'])
 			
 			// get the right template based on mimetype
 			var templateUtl = '';
-			if (ExhibitService.isText($scope.media.mimeType)) {
-				templateUtl = 'templates/textExhibit.html'
-			} else if (ExhibitService.isAudio($scope.media.mimeType)) {
-				templateUtl = 'templates/audioExhibit.html'
-			} else if (ExhibitService.isImage($scope.media.mimeType)) {
-				templateUtl = 'templates/imageExhibit.html'
-			}else if (ExhibitService.isVideo($scope.media.mimeType)) {
-				templateUtl = 'templates/videoExhibit.html'
+			if (ItemService.isText($scope.media.mimeType)) {
+				templateUtl = 'templates/textItem.html'
+			} else if (ItemService.isAudio($scope.media.mimeType)) {
+				templateUtl = 'templates/audioItem.html'
+			} else if (ItemService.isImage($scope.media.mimeType)) {
+				templateUtl = 'templates/imageItem.html'
+			}else if (ItemService.isVideo($scope.media.mimeType)) {
+				templateUtl = 'templates/videoItem.html'
 			}
 			
 			$ionicModal.fromTemplateUrl(templateUtl, {
