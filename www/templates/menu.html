@@ -1,0 +1,22 @@
+<ion-side-menus enable-menu-with-back-views="false">
+	<ion-side-menu-content>
+		<ion-header-bar align-title="center" class="bar-stable">
+			<div class="buttons">
+				<button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+			</div>
+			<h1 class="title">Available {{itemCaptionPlural}}</h1>
+			<div class="buttons">
+				<button ng-click="startScanning()" class="button button-positive icon ion-ios-refresh-empty button-clear"></button>
+				<button id="bleStatus" class="button icon ion-bluetooth button-clear"></button>
+			</div>
+		</ion-header-bar> 
+		<ion-nav-view name="tab-dash" animation="slide-left-right"></ion-nav-view>
+	</ion-side-menu-content>
+
+	<ion-side-menu side="left">
+		<ion-content class="has-header">
+			<ion-item nav-clear menu-close ng-click="startScanning()">Refresh</ion-item>
+			<ion-item nav-clear menu-close >Close</ion-item>
+		</ion-content>
+	</ion-side-menu>
+</ion-side-menus>

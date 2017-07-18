@@ -9,7 +9,7 @@ main.run(function($ionicPlatform,$rootScope) {
   // from implementation to implementation
   $rootScope.itemCaption = "Exhibit";
   $rootScope.itemCaptionPlural = "Exhibits";
-  $rootScope.appName = "My Tour Guide";
+  $rootScope.appName = "App That Knows Where Stuff Is!";
   
   // creds
   $rootScope.creds = {
@@ -132,7 +132,8 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
   $stateProvider.state('tab', {
     url: '/tab',
     abstract: true, // setup an abstract state for the tabs directive
-    templateUrl: 'templates/tabs.html'
+    controller: 'DashCtrl',
+    templateUrl: 'templates/menu.html'
  })
 
   // Each tab has its own nav history stack:
