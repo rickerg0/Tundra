@@ -1,6 +1,6 @@
 angular.module('tundra.controllers', ['base64'])
 
-.controller('SignUpCtrl', function($scope, $state,$http) {
+.controller('SignUpCtrl', function($scope, $rootScope, $state, $http) {
     // one time registration screen
 	// is this a registered device?
 	if (!$rootScope.creds.email || 0 === $rootScope.creds.email.length) {
@@ -45,6 +45,12 @@ angular.module('tundra.controllers', ['base64'])
 			// the callback gets called multiple times so add to the array
 			$scope.exibitTags.push(tag);
 		});
+	};
+	
+ 	$scope.doRefresh = function () {
+ 		$scope.startScanning();
+		$scope.$broadcast('scroll.refreshComplete');
+		$scope.$apply();		
 	};
 	
 	$scope.getMedia = function (media) {
