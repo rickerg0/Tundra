@@ -1,38 +1,38 @@
 angular.module('tundra.controllers', ['base64'])
 
-.controller('SignUpCtrl', function($scope, $rootScope, $state, $http) {
+.controller('SignUpCtrl', function($scope, $rootScope, $state, $http, Logger) {
     // one time registration screen
 	// is this a registered device?
 	if (!$rootScope.creds.email || 0 === $rootScope.creds.email.length) {
 		$scope.signUp = function(user) {
 
-			//console.log($cordovaDevice.getUUID());
+			//Logger.log($cordovaDevice.getUUID());
 			
 			$rootScope.creds.firstName = user.firstName;
 			$rootScope.creds.lastName = user.lastName;
 			$rootScope.creds.email = user.email;
 			
-			console.log( window.device );
+			Logger.log( window.device );
 			
 			$http({ url:$scope.baseServerUrl + "/TundraService/register?email=" + user.email + 
 													"&firstName=" + user.firstName+ "&lastName=" + user.lastName + 
 													"&platform=" + $rootScope.creds.platform + "&deviceId=",method:"GET"} )
 					.then(function(data,status) {
-						console.log("registered");
+						Logger.log("registered");
 						window.localStorage.setItem("firstName", user.firstName);
 						window.localStorage.setItem("lastName", user.lastName);
 						window.localStorage.setItem("email", user.email);
 
 						$state.go('tab.dash');
 						},
-					    function(data,status){ console.log(data)});
+					    function(data,status){ Logger.log(data)});
 		};
 	} else {
 		$state.go('tab.dash');
 	}
 })
 
-.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ItemService,InitialLoginService,$ionicModal,$http) {
+.controller('DashCtrl', function($base64,$scope,BLEService,OrganizationService,ItemService,InitialLoginService,$ionicModal,$http,$timeout,Logger) {
 	
 	// define functions and data elements to be placed in the scope
 	$scope.devices = [];
@@ -53,6 +53,14 @@ angular.module('tundra.controllers', ['base64'])
 		$scope.$apply();		
 	};
 	
+ 	$scope.refreshControl = {
+ 		selected: $scope.shouldRefresh,
+ 	    change: function ($event) {
+ 	    	Logger.debug("Event state: " + $event);
+ 	 		$scope.setRefreshState($event);
+ 	    }
+ 	};
+ 	
 	$scope.getMedia = function (media) {
 		ItemService.getItemTag(function(data,status){
 			
@@ -60,7 +68,7 @@ angular.module('tundra.controllers', ['base64'])
 				$scope.media=data.data;
 				$scope.media.url = "data:"+$scope.media.mimeType + ";base64,"+$scope.media.content;
 			} else {
-				console.log("getResult: no data returned");
+				Logger.log("getResult: no data returned");
 				$scope.message = "no data returned"
 			}
 			
@@ -101,14 +109,23 @@ angular.module('tundra.controllers', ['base64'])
 	};
 		
 	$scope.getOrganization = function(deviceID) {
-		console.log("getOrganization");
+		Logger.log("getOrganization");
 		OrganizationService.getList(function(data, status) {
 			$scope.list = data.data
 		});
 	};
 
-	InitialLoginService.initialLoginPromise.then(function(){
-		$scope.startScanning();
+	InitialLoginService.initialLoginPromise.then(function() {
+		
+	    var poll = function() {
+	    	console.log($scope.shouldRefresh);
+	    	if ($scope.shouldRefresh) {
+				$scope.startScanning();
+	    	}
+	        $timeout(poll, $scope.refreshInterval);
+	    }
+	    $scope.startScanning();
+        $timeout(poll, $scope.refreshInterval);
 	});
 
 });

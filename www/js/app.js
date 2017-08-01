@@ -1,6 +1,6 @@
 var main = angular.module('tundra', ['ionic', 'tundra.controllers', 'tundra.services']);
 
-main.run(function($ionicPlatform,$rootScope) {
+main.run(function($ionicPlatform,$rootScope,Logger) {
   // base server URLs
   $rootScope.baseServerUrl='http://127.0.0.1:8080';
   //$rootScope.baseServerUrl='http://ec2-54-85-236-85.compute-1.amazonaws.com:8080';
@@ -10,6 +10,7 @@ main.run(function($ionicPlatform,$rootScope) {
   $rootScope.itemCaption = "Exhibit";
   $rootScope.itemCaptionPlural = "Exhibits";
   $rootScope.appName = "App That Knows Where Stuff Is!";
+  $rootScope.refreshInterval = 10000;
   
   // creds
   $rootScope.creds = {
@@ -26,7 +27,7 @@ main.run(function($ionicPlatform,$rootScope) {
 
 	  document.addEventListener("deviceready", onDeviceReady, false);
 	  function onDeviceReady() {
-	      console.log(device.cordova);
+		  Logger.log(device.cordova);
 	  }
 	  
 	  // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -59,58 +60,107 @@ main.run(function($ionicPlatform,$rootScope) {
     	 * device.serial
     	 */
     	$rootScope.creds.uuid = device.uuid;
-    }
+    };
+    
+    $rootScope.setRefreshState = function(state) {
+    	Logger.log(state);
+    	state = (state === undefined ? true : state);
+    	Logger.log(state);
+    	window.localStorage.setItem("shouldRefresh", state);
+    	$rootScope.shouldRefresh = state;
+    };
+    
+    // get the state of the refresh flag
+    $rootScope.setRefreshState(window.localStorage.getItem("shouldRefresh"));
     
     //console.log(window.device);
   });
 });
 
-main.service('httpInterceptor', function($rootScope, $q, $injector) {  
+main.service('Logger', function() {
+	
+	// log levels
+	this.ERROR = 1;
+	this.INFO = 2;
+	this.DEBUG = 3;
+	this.level = this.ERROR;
+	
+	this.log = function(message) {
+		// same as debug
+		if (this.level >= this.DEBUG) {
+			console.log(message);
+		}
+	};
+	
+	this.error = function(message) {
+		if (this.level >= this.ERROR) {
+			console.log(message);
+		}
+	};
+	
+	this.info = function(message) {
+		if (this.level >= this.INFO) {
+			console.log(message);
+		}
+	}
 
-	var canRetry = true;
+	this.debug = function(message) {
+		if (this.level >= this.DEBUG) {
+			console.log(message);
+		}
+	}
+	
+});
+
+
+main.service('httpInterceptor', function($rootScope, $q, $injector, Logger) {  
+
 	var interceptor = this;
 	
 	interceptor.retry = function(httpConfig, deferred) {
-    	if (canRetry === true) {
-	        canRetry = false;
-	        var $http = $injector.get('$http');
-	        
-			$http({ 
-				url:$rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email,
-				method:"GET"} 
-			).then(
-				function(data,status) {
+    	Logger.log("Retry request...");
+        var $http = $injector.get('$http');
+        
+		$http({ 
+			url:$rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email,
+			method:"GET"} 
+		).then(
+			function(data,status) {
+				Logger.log("Processing retry...");
+				// get the new token
+				$rootScope.creds.token=data.data.token;
+				// make sure to set it on the header
+				httpConfig.headers['X-Token'] = $rootScope.creds.token;
+				// retry the original request
+				$http(httpConfig).then(function (response) {
+					deferred.resolve(response);
 					canRetry = true;
-					// get the new token
-					$rootScope.creds.token=data.data.token;
-					// make sure to set it on the header
-					httpConfig.headers['X-Token'] = $rootScope.creds.token;
-					// retry the original request
-					$http(httpConfig).then(function (response) {
-						deferred.resolve(response);
-					}, function (response) {
-						deferred.reject(response);
-					});
-				},
-        		function(data,status){ 
-					console.log(data)
-				}
-			);
-    	}
+				}, function (response) {
+					deferred.reject(response);
+					canRetry = true;
+				});
+			},
+    		function(data,status){ 
+				Logger.log(data)
+			}
+		);
     }
 
     interceptor.request = function(config) {
+    	Logger.log("Loading...");
 		$injector.get("$ionicLoading").show({content: "Loading...", showBackdrop: true, showDelay: 100});
 		config.headers['X-Token'] = $rootScope.creds.token;
     	return config || $q.when(config);
   	};
   	
   	interceptor.response = function(response) {
+  		Logger.log("Processing response...");
   		$injector.get("$ionicLoading").hide();
         return response || $q.when(response);
   	};
   	
   	interceptor.responseError = function (response) {
+  		Logger.log("Response error..." + response.config.url);
         if (response.status === 403) {
         	var deferred = $q.defer();
         	interceptor.retry(response.config, deferred);

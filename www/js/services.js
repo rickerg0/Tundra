@@ -1,13 +1,13 @@
 angular.module('tundra.services', [])
 
 
-.service("InitialLoginService", function($http, $rootScope){
-	
+.service("InitialLoginService", function($http, $rootScope, Logger){
+	this.Logger = Logger;
 	var _login=function() {
 		// return the promise as we'll need that to delay the initial scan 
 		return $http({ url:$rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email ,method:"GET"} ).then(function(data,status) {
 			$rootScope.creds.token=data.data.token;
-		},function(data,status){ console.log(data)});
+		},function(data,status){ Logger.log(data)});
 	};
 	
 	// catch the promise from the initial login
@@ -24,16 +24,16 @@ angular.module('tundra.services', [])
 	this.getList=function(callback){
 		$http({ 
 			url:$rootScope.baseServerUrl + "/TundraService/org/list" ,
-			method:"GET"}).then(callback,function(){ console.log(data)});
+			method:"GET"}).then(callback,function(){ Logger.log(data)});
 	};
 	 
 }).service("ItemService", function($http, $rootScope){
 	
 	this.getItemTag=function(callback,media){
-		console.log(media);
+		Logger.log(media);
 		$http({ 
 			url:$rootScope.baseServerUrl + "/TundraService/tag/media/"+media.itemTagMediaId ,
-			method:"GET"} ).then(callback,function(data,status){ console.log(data)});
+			method:"GET"} ).then(callback,function(data,status){ Logger.log(data)});
 	};
 
 	this.isText=function(mimetype) {
@@ -68,10 +68,10 @@ angular.module('tundra.services', [])
 						}).then(function(data,status) {
 							// call callback with single record
 							callback(data.data);
-						},function(data,status){ console.log(data)});
+						},function(data,status){ Logger.log(data)});
 				}, function() {
 					alert("FAILURE");
-					console.log("FAILURE")
+					Logger.log("FAILURE")
 				});
 				
 			} else {
