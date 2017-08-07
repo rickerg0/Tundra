@@ -64,14 +64,17 @@ main.run(function($ionicPlatform,$rootScope,Logger) {
     
     $rootScope.setRefreshState = function(state) {
     	Logger.log(state);
-    	state = (state === undefined ? true : state);
+    	// remember that the db value is a string so convert to a boolean
+    	state = (state === undefined ? true : state == 'true');
     	Logger.log(state);
     	window.localStorage.setItem("shouldRefresh", state);
     	$rootScope.shouldRefresh = state;
+    	Logger.log("shouldRefresh: " + $rootScope.shouldRefresh);
     };
     
     // get the state of the refresh flag
     $rootScope.setRefreshState(window.localStorage.getItem("shouldRefresh"));
+    
     
     //console.log(window.device);
   });
@@ -83,7 +86,7 @@ main.service('Logger', function() {
 	this.ERROR = 1;
 	this.INFO = 2;
 	this.DEBUG = 3;
-	this.level = this.ERROR;
+	this.level = this.DEBUG;
 	
 	this.log = function(message) {
 		// same as debug

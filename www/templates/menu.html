@@ -17,9 +17,10 @@
 			<ion-item nav-clear menu-close ng-click="startScanning()">Refresh</ion-item>
 		    <ion-item nav-clear>Enable Refresh
 		        <label class="toggle">
-		            <input type="checkbox" ng-checked="shouldRefresh" 
+		            <input type="checkbox" 
 		                                   ng-model="refreshControl.selected" 
-		                                   ng-change="refreshControl.change(refreshControl.selected);" />
+		                                   ng-change="refreshControl.change(refreshControl.selected);"
+		                                    />
 		            <div class="track"><div class="handle"></div></div>
 		         </label>			
 		    </ion-item>

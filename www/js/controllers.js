@@ -60,6 +60,8 @@ angular.module('tundra.controllers', ['base64'])
  	 		$scope.setRefreshState($event);
  	    }
  	};
+
+ 	Logger.debug("Refresh state: " + $scope.refreshControl.selected);
  	
 	$scope.getMedia = function (media) {
 		ItemService.getItemTag(function(data,status){
