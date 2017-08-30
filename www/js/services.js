@@ -27,7 +27,7 @@ angular.module('tundra.services', [])
 			method:"GET"}).then(callback,function(){ Logger.log(data)});
 	};
 	 
-}).service("ItemService", function($http, $rootScope){
+}).service("ItemService", function($http, $rootScope, Logger){
 	
 	this.getItemTag=function(callback,media){
 		Logger.log(media);
