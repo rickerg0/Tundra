@@ -5,11 +5,32 @@ angular.module('tundra.services', [])
 	this.Logger = Logger;
 	var _login=function() {
 		// return the promise as we'll need that to delay the initial scan 
-		return $http({ url:$rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email ,method:"GET"} ).then(function(data,status) {
+		var url = $rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email;
+		Logger.log("URL: " + url);
+		return $http({ url:url ,method:"GET"} ).then(function(data,status) {
 			$rootScope.creds.token=data.data.token;
+			//Logger.log("data.headers() -" + data.headers());
+			Logger.log("X-AUTH-TOKEN -" + data.headers()['x-token']);			
 		},function(data,status){ Logger.log(data)});
 	};
 	
+	// capture the user info from local storage BEFORE initial login
+    $rootScope.creds.firstName = window.localStorage.getItem("firstName");
+    $rootScope.creds.lastName = window.localStorage.getItem("lastName");
+    $rootScope.creds.email = window.localStorage.getItem("email");
+    if ((typeof(window.device) != "undefined")) {
+    	/*
+    	 * device.cordova
+    	 * device.model
+    	 * device.platform
+    	 * device.uuid
+    	 * device.version
+    	 * device.manufacturer
+    	 * device.isVirtual
+    	 * device.serial
+    	 */
+    	$rootScope.creds.uuid = device.uuid;
+    };	
 	// catch the promise from the initial login
 	var promise = _login();
 	

@@ -45,23 +45,6 @@ main.run(function($ionicPlatform,$rootScope,Logger) {
     $rootScope.creds.platform = ionic.Platform.platform();
     //window.localStorage.clear();
     
-    $rootScope.creds.firstName = window.localStorage.getItem("firstName");
-    $rootScope.creds.lastName = window.localStorage.getItem("lastName");
-    $rootScope.creds.email = window.localStorage.getItem("email");
-    if ((typeof(window.device) != "undefined")) {
-    	/*
-    	 * device.cordova
-    	 * device.model
-    	 * device.platform
-    	 * device.uuid
-    	 * device.version
-    	 * device.manufacturer
-    	 * device.isVirtual
-    	 * device.serial
-    	 */
-    	$rootScope.creds.uuid = device.uuid;
-    };
-    
     $rootScope.setRefreshState = function(state) {
     	Logger.log(state);
     	// remember that the db value is a string so convert to a boolean
@@ -75,8 +58,6 @@ main.run(function($ionicPlatform,$rootScope,Logger) {
     // get the state of the refresh flag
     $rootScope.setRefreshState(window.localStorage.getItem("shouldRefresh"));
     
-    
-    //console.log(window.device);
   });
 });
 
@@ -204,7 +185,16 @@ main.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider, $
       templateUrl: 'templates/signUp.html',
       controller: 'SignUpCtrl'
   })
+  
+  if (window.localStorage.getItem("email") && 0 < window.localStorage.getItem("email").length) {
+	  console.log("have email");
+	  $urlRouterProvider.otherwise('/tab/dash');
+  } else {
+	  console.log("don't have email");
+	  $urlRouterProvider.otherwise('/signup');
+  }
+
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/signup');
+  //$urlRouterProvider.otherwise('/signup');
 
 });
