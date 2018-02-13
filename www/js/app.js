@@ -137,7 +137,9 @@ main.service('httpInterceptor', function($rootScope, $q, $injector, Logger) {
   	};
   	
   	interceptor.response = function(response) {
-		$rootScope.creds.token=response.headers('X-Token');
+  		if (response.headers('X-Token') && 0 < response.headers('X-Token').length) {
+  			$rootScope.creds.token=response.headers('X-Token');
+  		}
   		$injector.get("$ionicLoading").hide();
         return response || $q.when(response);
   	};
