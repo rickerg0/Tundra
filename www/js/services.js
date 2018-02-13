@@ -8,9 +8,7 @@ angular.module('tundra.services', [])
 		var url = $rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email;
 		Logger.log("URL: " + url);
 		return $http({ url:url ,method:"GET"} ).then(function(data,status) {
-			$rootScope.creds.token=data.data.token;
-			//Logger.log("data.headers() -" + data.headers());
-			Logger.log("X-AUTH-TOKEN -" + data.headers()['x-token']);			
+			$rootScope.creds.token=data.headers('X-Token');
 		},function(data,status){ Logger.log(data)});
 	};
 	

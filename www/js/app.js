@@ -112,7 +112,7 @@ main.service('httpInterceptor', function($rootScope, $q, $injector, Logger) {
 			function(data,status) {
 				Logger.log("Processing retry...");
 				// get the new token
-				$rootScope.creds.token=data.data.token;
+				//$rootScope.creds.token=data.data.token;
 				// make sure to set it on the header
 				httpConfig.headers['X-Token'] = $rootScope.creds.token;
 				// retry the original request
@@ -131,14 +131,13 @@ main.service('httpInterceptor', function($rootScope, $q, $injector, Logger) {
     }
 
     interceptor.request = function(config) {
-    	Logger.log("Loading...");
 		$injector.get("$ionicLoading").show({content: "Loading...", showBackdrop: true, showDelay: 100});
 		config.headers['X-Token'] = $rootScope.creds.token;
     	return config || $q.when(config);
   	};
   	
   	interceptor.response = function(response) {
-  		Logger.log("Processing response...");
+		$rootScope.creds.token=response.headers('X-Token');
   		$injector.get("$ionicLoading").hide();
         return response || $q.when(response);
   	};
