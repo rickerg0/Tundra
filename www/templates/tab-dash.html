@@ -1,53 +1,22 @@
-<!DOCTYPE html>
-
-<html>
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-<ion-view view-title="Dashboard">
-  <ion-content >
-	  <ion-header-bar align-title="center" class="bar-stable">
-		  <div class="buttons">
-			  <button ng-click="startScanning()" class="button">Search</button>
-		  </div>
-		  <h1 class="title">Title</h1>
-		  <div class="buttons">
-			  <button id="bleStatus" class="button icon ion-bluetooth "></button>
-		  </div>
-	  </ion-header-bar>
-      <ion-label class="item item-input">
-		 <span class="input-label" >Input:</span>
-		 <input type="text" value="" ng-model="myText">
-	 </ion-label>
-	 <table id="table-1">
-		 <thead>
-			 <tr>
-				 <th> -- Name-- </th>
-				 <th> -- ID --</th>
-				 <th> -- RSSI --</th>
-			 </tr>
-		 </thead>
-		 <tbody>
-		 <tr ng-repeat="device in devices"> 
-		 	
-				 <td><a ng-click="getResult({{device.id}})">{{device.name}}</a></td>
-	     		<td>{{device.id}}</td>
-	     		<td>{{device.rssi}}</td>
-	     	</tr>
-     		
-			
-		 </tbody>
-		 
-	 </table>
-     
-	  
-	    
-	 
-            
-     
-  </ion-content>
-</ion-view>
-
-</body>
-</html>
+<ion-view>
+	<ion-content>
+		<ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
+		<div ng-repeat="tag in exibitTags" class="item item-button-right">
+			<a ng-click="toggleTag(tag)" ng-class="{active: isTagShown(tag)}">
+				{{tag.itemTagName}}
+			</a>
+			<div class="buttons">
+				<span ng-repeat="media in tag.mediaSet">
+					<button class="button" ng-click="getMedia({{media}})">
+						<i ng-if="itemService.isText(media.itemTagMimeType)" class="icon ion-document"></i>
+						<i ng-if="itemService.isAudio(media.itemTagMimeType)" class="icon ion-headphone"></i> 
+						<i ng-if="itemService.isVideo(media.itemTagMimeType)" class="icon ion-videocamera"></i>
+					</button>
+				</span>
+			</div>
+			<div class="item-accordion" style="padding-top:15px;white-space: normal" ng-show="isTagShown(tag)">
+	            The {{tag.itemTagName}} is located in the {{tag.locationName}} at {{tag.organizationName}}
+	         </div>		
+		</div>
+	</ion-content>
+</ion-view>		

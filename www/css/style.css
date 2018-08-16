@@ -1,6 +1,38 @@
 /* Empty. Add your own CSS if you like */
-
+.modal-backdrop-bg {
+    transition: opacity 300ms ease-in-out;
+    -webkit-transition: opacity 300ms ease-in-out;
+    background-color: #000;
+    opacity: 0;
+}
 
 .active .modal-backdrop-bg {
-    opacity: 0;
+    opacity: 0.5;
+}
+
+.bar-footer {
+    height: 42px;
+    padding: 0;
+    margin: 0;
+}
+
+.fullsize {
+    padding-top: 40px;
+	height: 100%;
+    width: 100%;
+}
+
+.list .item.item-accordion {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    white-space: normal !important;
+}
+
+.list .item.item-accordion.ng-hide {
+    line-height: 0px;
+}
+
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+    display: block !important;
 }

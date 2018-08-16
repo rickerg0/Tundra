@@ -1,51 +1,117 @@
-angular.module('starter.services', [])
+angular.module('tundra.services', [])
 
-.service("BLEService", function(){
-	var device={};			
-	var devices=[];
-	var that = this;
-	var onConnect = function(device) {
-		    device.name=device.name;
-			device.id=device.id;
-			device.rssi=device.rssi;
-			
-			devices.push(device);
-			return devices;
-				 
-	 }
-	var onError = function() {
-		    device.name='none';
-			device.id='0';
-			device.rssi='0';
-			
-			
-			
-			return devices;	 
-	 }
-   
+
+.service("InitialLoginService", function($http, $rootScope, Logger){
+	this.Logger = Logger;
+	var _login=function() {
+		// return the promise as we'll need that to delay the initial scan 
+		var url = $rootScope.baseServerUrl + "/TundraService/login?email=" + $rootScope.creds.email;
+		Logger.log("URL: " + url);
+		return $http({ url:url ,method:"GET"} ).then(function(data,status) {
+			$rootScope.creds.token=data.headers('X-Token');
+		},function(data,status){ Logger.log(data)});
+	};
+	
+	// capture the user info from local storage BEFORE initial login
+    $rootScope.creds.firstName = window.localStorage.getItem("firstName");
+    $rootScope.creds.lastName = window.localStorage.getItem("lastName");
+    $rootScope.creds.email = window.localStorage.getItem("email");
+    if ((typeof(window.device) != "undefined")) {
+    	/*
+    	 * device.cordova
+    	 * device.model
+    	 * device.platform
+    	 * device.uuid
+    	 * device.version
+    	 * device.manufacturer
+    	 * device.isVirtual
+    	 * device.serial
+    	 */
+    	$rootScope.creds.uuid = device.uuid;
+    };	
+	// catch the promise from the initial login
+	var promise = _login();
+	
+	// return the initial promise along with the functions so 
+	// the controller creation can key off of that
 	return {
-		connect:function() {
-			//ble.scan([], 30, onConnect, onError);
-			   device.name='none';
-				device.id='0';
-				device.rssi='0';
-				
-				devices.push(device);
-				devices.push({name:'foo',id:'4',rssi:'4'});
-					
-				return devices;
-		},
-		disconnect:function(device) {
-			
-		}
+		initialLoginPromise: promise
 	}
-}
-		
+	
+})
+.service("OrganizationService", function($http, $rootScope){
+	this.getList=function(callback){
+		$http({ 
+			url:$rootScope.baseServerUrl + "/TundraService/org/list" ,
+			method:"GET"}).then(callback,function(){ Logger.log(data)});
+	};
+	 
+}).service("ItemService", function($http, $rootScope, Logger){
+	
+	this.getItemTag=function(callback,media){
+		Logger.log(media);
+		$http({ 
+			url:$rootScope.baseServerUrl + "/TundraService/tag/media/"+media.itemTagMediaId ,
+			method:"GET"} ).then(callback,function(data,status){ Logger.log(data)});
+	};
 
+	this.isText=function(mimetype) {
+		return mimetype === 'text/plain';
+	};
+	
+	this.isAudio=function(mimetype) {
+		return mimetype === 'audio/mp3';
+	};
+	this.isImage=function(mimetype) {
+		return mimetype === 'image/jpg';
+	};
+	this.isVideo=function(mimetype) {
+		return mimetype === 'video/mp4';
+	};
+	
+}).service("BLEService", function($http, $rootScope){
 
-)
-.factory('Chats', function() {
-  
+	return {
+		connect:function(callback) {
+			if (typeof(ble) != "undefined") {
+
+				// we have bluetooth, flip the button 
+	    		document.getElementById("bleStatus").style= "color:green;";
+	    		
+				ble.scan([], 30, function(device) {
+					alert(JSON.stringify(device));
+					// we found a device, now lets see if it's ours
+					$http({
+						method:"GET",
+						url:$rootScope.baseServerUrl + "/TundraService/tag/"+device.id ,
+						}).then(function(data,status) {
+							// call callback with single record
+							callback(data.data);
+						},function(data,status){ Logger.log(data)});
+				}, function() {
+					alert("FAILURE");
+					Logger.log("FAILURE")
+				});
+				
+			} else {
+				//no bluetooth
+				document.getElementById("bleStatus").style= "color:red;";
+				
+				$http({ 
+					url:$rootScope.baseServerUrl + "/TundraService/tag/list" ,
+					method:"GET"} ).then(function(data,status) {
+						if (data.data) {
+							// loop thru array and call callback with single record
+							for (var i = 0; i < data.data.length; i++) {
+								callback(data.data[i])					
+							}							
+						}
+				},function(data,status){ console.log(data)});
+
+			}
+		},
+		disconnect:function(device) {}
+	}
 });
 
 
